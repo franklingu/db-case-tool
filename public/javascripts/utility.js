@@ -46,6 +46,8 @@ function getDifference(set1, set2) {
   return _.difference(set1, set2);
 }
 
+// get closure of the input attribute based on the input fds
+// @attr: []; @fd: [{left: '', right; '', type:''}]
 function getClosureForAttr(attr, fd) {
   var fdSet = removeDuplicates(fd);
   var update = true;
@@ -62,3 +64,39 @@ function getClosureForAttr(attr, fd) {
 
   return closure;
 }
+
+// get all keys of the input attr set and input fds
+// @attrs: ['elem']; @fd: [{left: '', right; '', type:''}]
+function getAllKeys(attrs, fd) {
+  var attrSet = removeDuplicates(attrs);
+  var fdSet = removeDuplicates(fd);
+  var starting = [];
+  var tracking = {};
+  var keys = [];
+  // something to start with
+  _.forEach(fdSet, function (item) {
+    if (!contains(starting, item.left)) {
+      starting.push(item.left);
+    }
+  });
+  _.forEach(attrSet, function (item) {
+    if (!contains(starting, [item])) {
+      starting.push([item]);
+    }
+  });
+
+  console.log(keys);
+  // get closures of starting
+  _.forEach(starting, function (item) {
+    if (!contains(keys, item) && !tracking[item.join('.')]) {
+      tracking[item.join('.')] = getClosureForAttr(item, fdSet);
+      if (isSetsEqual(tracking[item.join('.')], attrSet)) {
+        keys.push(item);
+        console.log(keys);
+      }
+    };
+  })
+
+  return keys;
+  // further step to find more candidate keys
+} 
