@@ -44,7 +44,7 @@ var dbtester = (function () {
         isIn2NF = false;
       }
     });
-    return false;
+    return isIn2NF;
   };
 
   // return whether a relation is 3NF
