@@ -1,5 +1,7 @@
 // requires utility to be defined in global scope first
 // see if we can use AMD to do requires
+/* global utility: false, _: false */
+'use strict';
 if (!window.utility) {
   throw Error('dbtester requires utility to be defined in global scope first');
 }

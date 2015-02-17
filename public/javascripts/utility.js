@@ -1,3 +1,5 @@
+/* global _: false */
+'use strict';
 var utility = (function () {
   var utility = {};
 

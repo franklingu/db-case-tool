@@ -1,3 +1,5 @@
+/* global QUnit: false, utility: false */
+'use strict';
 QUnit.test('utility.contains test', function (assert) {
   assert.ok(utility.contains(['A', 'B', 'C'], 'A'), 'Normal case');
 

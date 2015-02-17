@@ -1,0 +1,15 @@
+{
+  "browser": true,
+  "node": true,
+  "qunit": true,
+  "esnext": true,
+  "globals": {},
+  "globalstrict": true,
+  "quotmark": true,
+  "undef": true,
+  "unused": false,
+  "laxbreak": true,
+  "indent": 2,
+  "camelcase": true,
+  "curly": true
+}
