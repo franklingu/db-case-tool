@@ -1,56 +1,84 @@
-function getAllPrimeAttributes(keys) {
-  var primeAttrs = keys[0];
-  function itereteeInner(item) {
-    if (!contains(primeAttrs, item)) {
-      primeAttrs.push(item);
+// requires utility to be defined in global scope first
+// see if we can use AMD to do requires
+if (!window.utility) {
+  throw Error('dbtester requires utility to be defined in global scope first');
+}
+
+var dbtester = (function () {
+  var dbtester = {};
+  function getAllPrimeAttributes(keys) {
+    var primeAttrs = keys[0];
+    function itereteeInner(item) {
+      if (!utility.contains(primeAttrs, item)) {
+        primeAttrs.push(item);
+      }
     }
+    function itereteeOuter(item) {
+      _.forEach(item, itereteeInner);
+    }
+    _.forEach(keys, itereteeOuter);
+    return primeAttrs;
   }
-  function itereteeOuter(item) {
-    _.forEach(item, itereteeInner);
-  }
-  _.forEach(keys, itereteeOuter);
-  return primeAttrs;
-}
 
-// return whether a relation is 2NF
-// @attrs: []; @fds: [{left: '', right; '', type:''}]
-function is2NF(attrs, fds) {
-  var attrSet = removeDuplicates(attrs);
-  var fdSet = removeDuplicates(fds);
-  var keys = getAllKeys(attrSet, fdSet);
-  var primeAttrs = getAllPrimeAttributes(keys);
-  return false;  // stuck now. wait on findAllKeys to be completed
-}
-
-// return whether a relation is 3NF
-// @attrs: []; @fds: [{left: '', right; '', type:''}]
-function is3NF(attrs, fds) {
-  var attrSet = removeDuplicates(attrs);
-  var fdSet = removeDuplicates(fds);
-  var keys = getAllKeys(attrSet, fdSet);
-  var primeAttrs = getAllPrimeAttributes(keys);
-  var isIn3NF = true;
-  _.forEach(fdSet, function (item) {
-    if (!(isSubset(item.left, item.right)
-        || isSuperkeyForRelation(item.left, attrSet, fdSet)
-        || isSubset(primeAttrs, item.right))) {
-      isIn3NF = false;
+  // return whether a relation is 2NF
+  // @attrs: []; @fds: [{left: '', right; '', type:''}]
+  dbtester.is2NF = function (attrs, fds) {
+    var attrSet = utility.removeDuplicates(attrs);
+    var fdSet = utility.removeDuplicates(fds);
+    var keys = utility.getAllKeys(attrSet, fdSet);
+    var primeAttrs = getAllPrimeAttributes(keys);
+    var isIn2NF = true;
+    function isProperSubsetForKey(attr) {
+      var isProperSub = false;
+      _.forEach(keys, function (item) {
+        if (utility.isProperSubset(item, attr)) {
+          isProperSub = true;
+        }
+      });
+      return isProperSub;
     }
-  });
-  return isIn3NF;
-}
+    _.forEach(fdSet, function (item) {
+      if (!(utility.isSubset(item.left, item.right)
+          || !isProperSubsetForKey(item.left)
+          || utility.isSubset(primeAttrs, item.right))) {
+        isIn2NF = false;
+      }
+    });
+    return false;
+  };
 
-// return whether a relation is BCNF
-// @attrs: []; @fds: [{left: '', right; '', type:''}]
-function isBCNF(attrs, fds) {
-  var attrSet = removeDuplicates(attrs);
-  var fdSet = removeDuplicates(fds);
-  var isInBCNF = true;
-  _.forEach(fdSet, function (item) {
-    if (!(isSubset(item.left, item.right)
-        || isSuperkeyForRelation(item.left, attrSet, fdSet))) {
-      isInBCNF = false;
-    }
-  });
-  return isInBCNF;
-}
+  // return whether a relation is 3NF
+  // @attrs: []; @fds: [{left: '', right; '', type:''}]
+  dbtester.is3NF = function (attrs, fds) {
+    var attrSet = utility.removeDuplicates(attrs);
+    var fdSet = utility.removeDuplicates(fds);
+    var keys = utility.getAllKeys(attrSet, fdSet);
+    var primeAttrs = getAllPrimeAttributes(keys);
+    var isIn3NF = true;
+    _.forEach(fdSet, function (item) {
+      if (!(utility.isSubset(item.left, item.right)
+          || utility.isSuperkeyForRelation(item.left, attrSet, fdSet)
+          || utility.isSubset(primeAttrs, item.right))) {
+        isIn3NF = false;
+      }
+    });
+    return isIn3NF;
+  };
+
+  // return whether a relation is BCNF
+  // @attrs: []; @fds: [{left: '', right; '', type:''}]
+  dbtester.isBCNF = function (attrs, fds) {
+    var attrSet = utility.removeDuplicates(attrs);
+    var fdSet = utility.removeDuplicates(fds);
+    var isInBCNF = true;
+    _.forEach(fdSet, function (item) {
+      if (!(utility.isSubset(item.left, item.right)
+          || utility.isSuperkeyForRelation(item.left, attrSet, fdSet))) {
+        isInBCNF = false;
+      }
+    });
+    return isInBCNF;
+  };
+
+  return dbtester;
+}());
