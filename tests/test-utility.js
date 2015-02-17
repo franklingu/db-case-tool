@@ -253,37 +253,6 @@ QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
   assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
 });
 
-// a subtest for an incomplete function only
-QUnit.test('getAllKeys from-fds-only', function (assert) {
-  var attrs = ['A', 'B', 'C', 'D'];
-  var fds = [{
-    left: ['A'],
-    right: ['C'],
-    type: 'fd'
-  }, {
-    left: ['A', 'B'],
-    right: ['C'],
-    type: 'fd'
-  }, {
-    left: ['B'],
-    right: ['D'],
-    type: 'fd'
-  }];
-  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B']], 'One fd only');
-
-  fds = [{
-    left: ['A', 'B'],
-    right: ['C'],
-    type: 'fd'
-  }, {
-    left: ['B'],
-    right: ['D'],
-    type: 'fd'
-  }];
-
-  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B']], 'One fd only');
-})
-
 QUnit.test('isSuperkeyForRelation', function (assert) {
   var attrs = ['A', 'B', 'C', 'D', 'E'];
   var fds = [{
@@ -336,4 +305,38 @@ QUnit.test('isKeyForRelation', function (assert) {
   assert.ok(!isKeyForRelation(['A', 'B', 'D'], attrs, fds), "Not Key 1");
   assert.ok(!isKeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), "Not Key 2");
   assert.ok(!isKeyForRelation(['A', 'B'], attrs, fds), "Not Key 3");
-})
+});
+
+// a subtest for an incomplete function only
+QUnit.test('getAllKeys from-fds-only', function (assert) {
+  var attrs = ['A', 'B', 'C', 'D'];
+  var fds = [{
+    left: ['A'],
+    right: ['C'],
+    type: 'fd'
+  }, {
+    left: ['A', 'B'],
+    right: ['C'],
+    type: 'fd'
+  }, {
+    left: ['B'],
+    right: ['D'],
+    type: 'fd'
+  }];
+  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B']], '1 fd only');
+
+  fds = [{
+    left: ['A', 'B'],
+    right: ['C'],
+    type: 'fd'
+  }, {
+    left: ['B'],
+    right: ['D'],
+    type: 'fd'
+  }];
+
+  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B']], '2 fds');
+
+  attrs = ['A', 'B', 'C', 'D', 'E'];
+  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B', 'E']], '1 attr not listed in fds');
+});

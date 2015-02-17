@@ -1,11 +1,23 @@
+// TODO: complete the following function
 QUnit.test('is2NF test', function (assert) {
   assert.ok(false, 'Not implemented');
 });
 
 QUnit.test('is3NF test', function (assert) {
-  assert.ok(false, 'Not implemented');
+  var attrs = ['A', 'B', 'C', 'D', 'E'];
+  var fds = [{
+    left: ['A', 'B', 'C'],
+    right: ['C', 'D'],
+    type: 'fd'
+  }, {
+    left: ['A', 'B'],
+    right: ['E', 'C'],
+    type: 'fd'
+  }];
+  assert.ok(is3NF(attrs, fds), 'In 3NF');
 });
 
+// TODO: complete the following
 QUnit.test('isBCNF test', function (assert) {
   var attrs = ['A', 'B', 'C', 'D', 'E'];
   var fds = [{
@@ -71,7 +83,7 @@ QUnit.test('isBCNF test', function (assert) {
     left: ['A', 'B'],
     right: ['C', 'D'],
     type: 'fd'
-  }],
+  }];
   assert.ok(!isBCNF(attrs, fds), 'Not BCNF');
 
   fds = [{
@@ -82,6 +94,6 @@ QUnit.test('isBCNF test', function (assert) {
     left: ['A', 'B', 'C'],
     right: ['E'],
     type: 'fd'
-  }],
+  }];
   assert.ok(!isBCNF(attrs, fds), 'Not BCNF');
 });

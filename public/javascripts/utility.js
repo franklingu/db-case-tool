@@ -1,7 +1,16 @@
 // returns whether set contains elem
 // @set: []; elem: any
 function contains(set, elem) {
-  return _.indexOf(set, elem) !== -1;
+  var isContaining = false;
+  if (typeof elem !== 'object') {
+    return _.indexOf(set, elem) !== -1;
+  }
+  _.forEach(set, function (item) {
+    if (isSetsEqual(item, elem)) {
+      isContaining = true;
+    }
+  });
+  return isContaining;
 }
 
 // remove duplicates in the given set and return the result
@@ -78,57 +87,6 @@ function getClosureForAttr(attr, fds) {
   return closure;
 }
 
-// not compeltely working yet
-// get all keys of the input attr set and input fds
-// @attrs: ['elem']; @fds: [{left: '', right; '', type:''}]
-function getAllKeys(attrs, fds) {
-  var attrSet = removeDuplicates(attrs);
-  var fdSet = removeDuplicates(fds);
-  var starting = [];
-  var tracking = {};
-  // var superkeys = [];
-  // var lefts = [];
-  // var right = [];
-  // var middle = [];
-  var keys = [];
-
-  // still needs work on this.
-  // function isSuperKeyAlready(keys, candidate) {
-  //   var isSuperKey = false;
-  //   _.forEach(keys, function (item) {
-  //     if (isSubset(candidate, item)) {
-  //       isSuperKey = true;
-  //     }
-  //   });
-  //   return isSuperKey;
-  // }
-
-  // // a complete way of finding all keys
-  // superkeys.push(attrs);  // for sure the universal relation itself is a super key
-
-
-  // check for any LHS that can make up to be keys
-  // something to start with
-  _.forEach(fdSet, function (item) {
-    if (!contains(starting, item.left)) {
-      starting.push(item.left);
-    }
-  });
-
-  // get closures of starting
-  _.forEach(starting, function (item) {
-    if (!contains(keys, item) && !tracking[item.join('.')]) {
-      tracking[item.join('%')] = getClosureForAttr(item, fdSet);
-      if (isSetsEqual(tracking[item.join('%')], attrSet)) {
-        keys.push(item);
-        console.log(keys);
-      }
-    }
-  });
-
-  return keys;
-}
-
 // return whether attr is a superkey for the relation with fds
 // @attr: []; @attrs: []; @fds: [{left: '', right; '', type:''}]
 function isSuperkeyForRelation(attr, attrs, fds) {
@@ -157,4 +115,44 @@ function isKeyForRelation(attr, attrs, fds) {
     }
   });
   return isKey;
+}
+
+// TODO: not compeltely tested yet
+// get all keys of the input attr set and input fds
+// @attrs: ['elem']; @fds: [{left: '', right; '', type:''}]
+function getAllKeys(attrs, fds) {
+  var attrSet = removeDuplicates(attrs);
+  var fdSet = removeDuplicates(fds);
+  var superkeys = [];
+  var subsets = [];
+  var isUpdating = false;
+  var keys = [];
+
+  // a complete way of finding all keys
+  superkeys.push(attrs);  // for sure the universal relation itself is a super key
+  function generateSubsetsForSuperkey(superkey) {
+    _.forEach(fdSet, function (item) {
+      var sub = getUnion(getDifference(superkey, item.right), item.left);
+      if (isProperSubset(superkey, item.left)
+          && isProperSubset(superkey, item.right)
+          && !contains(subsets, sub)
+          && !contains(superkeys, sub)) {
+        subsets.push(sub);
+        isUpdating = true;
+      }
+    });
+  }
+  do {
+    isUpdating = false;
+    _.forEach(superkeys, generateSubsetsForSuperkey);
+    superkeys = getUnion(superkeys, subsets);
+    subsets = [];
+  } while (isUpdating);
+
+  _.forEach(superkeys, function (item) {
+    if (isKeyForRelation(item, attrSet, fdSet)) {
+      keys.push(item);
+    }
+  });
+  return keys;
 }
