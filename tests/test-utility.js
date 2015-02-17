@@ -63,14 +63,14 @@ QUnit.test('getDifference test', function (assert) {
 });
 
 QUnit.test('getClosureForAttr single-attr-test', function (assert) {
-  var fd = [{
+  var fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A'], fd), ['A', 'B']), 'One fd only');
+  assert.ok(isSetsEqual(getClosureForAttr(['A'], fds), ['A', 'B']), 'One fd only');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -79,9 +79,9 @@ QUnit.test('getClosureForAttr single-attr-test', function (assert) {
     right: ['C'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A'], fd), ['A', 'B', 'C']), 'Transitive fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A'], fds), ['A', 'B', 'C']), 'Transitive fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -94,9 +94,9 @@ QUnit.test('getClosureForAttr single-attr-test', function (assert) {
     right: ['A'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A'], fd), ['A', 'B', 'C']), 'Circular fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A'], fds), ['A', 'B', 'C']), 'Circular fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -109,9 +109,9 @@ QUnit.test('getClosureForAttr single-attr-test', function (assert) {
     right: ['D'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A'], fd), ['A', 'B', 'C', 'D']), 'Derived fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A'], fds), ['A', 'B', 'C', 'D']), 'Derived fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -128,9 +128,9 @@ QUnit.test('getClosureForAttr single-attr-test', function (assert) {
     right: ['A', 'E'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A'], fd), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A'], fds), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -151,25 +151,25 @@ QUnit.test('getClosureForAttr single-attr-test', function (assert) {
     right: ['D'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A'], fd), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A'], fds), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
 });
 
 QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
-  var fd = [{
+  var fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'E']), 'One fd only');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'E']), 'One fd only');
 
-  fd = [{
+  fds = [{
     left: ['A', 'E'],
     right: ['B', 'D'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'D', 'E']), 'One multi-attr fd');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'D', 'E']), 'One multi-attr fd');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -178,9 +178,9 @@ QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
     right: ['C'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'C', 'E']), 'Transitive fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'C', 'E']), 'Transitive fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -193,9 +193,9 @@ QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
     right: ['A'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'C', 'E']), 'Circular fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'C', 'E']), 'Circular fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -208,9 +208,9 @@ QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
     right: ['D'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -227,9 +227,9 @@ QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
     right: ['A', 'E'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
 
-  fd = [{
+  fds = [{
     left: ['A'],
     right: ['B'],
     type: 'fd'
@@ -250,12 +250,13 @@ QUnit.test('getClosureForAttr multiple-attrs-test', function (assert) {
     right: ['D'],
     type: 'fd'
   }];
-  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fd), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
+  assert.ok(isSetsEqual(getClosureForAttr(['A', 'E'], fds), ['A', 'B', 'C', 'D', 'E']), 'Derived fds');
 });
 
+// a subtest for an incomplete function only
 QUnit.test('getAllKeys from-fds-only', function (assert) {
   var attrs = ['A', 'B', 'C', 'D'];
-  var fd = [{
+  var fds = [{
     left: ['A'],
     right: ['C'],
     type: 'fd'
@@ -268,9 +269,9 @@ QUnit.test('getAllKeys from-fds-only', function (assert) {
     right: ['D'],
     type: 'fd'
   }];
-  assert.deepEqual(getAllKeys(attrs, fd), [['A', 'B']], 'One fd only');
+  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B']], 'One fd only');
 
-  fd = [{
+  fds = [{
     left: ['A', 'B'],
     right: ['C'],
     type: 'fd'
@@ -280,5 +281,59 @@ QUnit.test('getAllKeys from-fds-only', function (assert) {
     type: 'fd'
   }];
 
-  assert.deepEqual(getAllKeys(attrs, fd), [['A', 'B']], 'One fd only');
+  assert.deepEqual(getAllKeys(attrs, fds), [['A', 'B']], 'One fd only');
+})
+
+QUnit.test('isSuperkeyForRelation', function (assert) {
+  var attrs = ['A', 'B', 'C', 'D', 'E'];
+  var fds = [{
+    left: ['A'],
+    right: ['B'],
+    type: 'fd'
+  }, {
+    left: ['B', 'C'],
+    right: ['E'],
+    type: 'fd'
+  }, {
+    left: ['D', 'E'],
+    right: ['A'],
+    type: 'fd'
+  }];
+  assert.ok(isSuperkeyForRelation(['A', 'C', 'D'], attrs, fds), "Candidate key 1");
+  assert.ok(isSuperkeyForRelation(['B', 'C', 'D'], attrs, fds), "Candidate key 2");
+  assert.ok(isSuperkeyForRelation(['E', 'C', 'D'], attrs, fds), "Candidate key 1");
+  assert.ok(isSuperkeyForRelation(['A', 'C', 'D', 'E'], attrs, fds), "Superkey 1");
+  assert.ok(isSuperkeyForRelation(['A', 'C', 'D', 'B'], attrs, fds), "Superkey 2");
+  assert.ok(isSuperkeyForRelation(['A', 'B', 'C', 'D', 'E'], attrs, fds), "Superkey 3");
+
+  assert.ok(!isSuperkeyForRelation(['A', 'B', 'D'], attrs, fds), "Not superkey 1");
+  assert.ok(!isSuperkeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), "Not superkey 2");
+  assert.ok(!isSuperkeyForRelation(['A', 'B'], attrs, fds), "Not superkey 3");
+});
+
+QUnit.test('isKeyForRelation', function (assert) {
+  var attrs = ['A', 'B', 'C', 'D', 'E'];
+  var fds = [{
+    left: ['A'],
+    right: ['B'],
+    type: 'fd'
+  }, {
+    left: ['B', 'C'],
+    right: ['E'],
+    type: 'fd'
+  }, {
+    left: ['D', 'E'],
+    right: ['A'],
+    type: 'fd'
+  }];
+  assert.ok(isKeyForRelation(['A', 'C', 'D'], attrs, fds), "Candidate key 1");
+  assert.ok(isKeyForRelation(['B', 'C', 'D'], attrs, fds), "Candidate key 2");
+  assert.ok(isKeyForRelation(['E', 'C', 'D'], attrs, fds), "Candidate key 1");
+
+  assert.ok(!isKeyForRelation(['A', 'C', 'D', 'E'], attrs, fds), "Superkey 1");
+  assert.ok(!isKeyForRelation(['A', 'C', 'D', 'B'], attrs, fds), "Superkey 2");
+  assert.ok(!isKeyForRelation(['A', 'B', 'C', 'D', 'E'], attrs, fds), "Superkey 3");
+  assert.ok(!isKeyForRelation(['A', 'B', 'D'], attrs, fds), "Not Key 1");
+  assert.ok(!isKeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), "Not Key 2");
+  assert.ok(!isKeyForRelation(['A', 'B'], attrs, fds), "Not Key 3");
 })
