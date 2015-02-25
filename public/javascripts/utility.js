@@ -5,6 +5,7 @@ var utility = (function () {
   //      array of fds and array of array of strings.
   // 2. For any functions that require two set params,
   //      symmetry of set is expected.
+  // 3. For any set param, elems are expected to be of the same type.
   var utility = {};
 
   // returns whether set contains elem
@@ -27,11 +28,8 @@ var utility = (function () {
   utility.removeDuplicates = function (set) {
     if (!set || !set.length || (typeof set[0]) !== 'object') {
       return _.uniq(set);
-    } else if ((typeof set[0]) === 'object' && set[0].length) {
+    } else if ((typeof set[0]) === 'object' && set[0].length >= 0) {
       return _.uniq(set, function (item) {
-        if (item.sort) {
-          console.log(item);
-        }
         return JSON.stringify(item.sort());
       });
     }
@@ -157,6 +155,7 @@ var utility = (function () {
       }
       subsets = utility.getUnion(subsets, tmpsets);
     }
+    subsets.push([]);
     return subsets;
   };
 

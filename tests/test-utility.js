@@ -2,24 +2,31 @@
 'use strict';
 QUnit.test('utility.contains test', function (assert) {
   assert.ok(utility.contains(['A', 'B', 'C'], 'A'), 'Normal case');
+  assert.ok(utility.contains([['A'], ['B', 'C']], ['A']), 'Normal case');
+  assert.ok(utility.contains([['A'], ['B', 'C']], ['C', 'B']), 'Normal case');
 
   assert.ok(!utility.contains(['B', 'C'], 'A'), 'Not containing');
   assert.ok(!utility.contains([], 'B'), 'Empty set');
   assert.ok(!utility.contains(['A']), 'Null element');
+  assert.ok(!utility.contains([['A'], ['B', 'C']], ['A', 'B']), 'Different set elems');
 });
 
 QUnit.test('utility.isSubset test', function (assert) {
   assert.ok(utility.isSubset(['A', 'B', 'C'], ['A']), 'Normal case');
   assert.ok(utility.isSubset(['A', 'B', 'C'], ['A', 'B', 'C']), 'Normal case');
+  assert.ok(utility.isSubset([['A'], ['B'], ['C']], [['A'], ['B']]), 'Normal case');
+  assert.ok(utility.isSubset([['A', 'B'], ['C']], [['A', 'B']]), 'Normal case');
   assert.ok(utility.isSubset(['B'], []), 'Empty set');
 
   assert.ok(!utility.isSubset(['B', 'C'], ['A', 'B']), 'Extra element');
   assert.ok(!utility.isSubset([], ['A']), 'Extra element');
+  assert.ok(!utility.isSubset([['A', 'B'], ['C']], [['A', 'C']]), 'Different set elems');
 });
 
 QUnit.test('utility.isSetsEqual', function (assert) {
   assert.ok(utility.isSetsEqual(['A', 'B', 'C'], ['C', 'A', 'B']), 'Normal case');
   assert.ok(utility.isSetsEqual(['A', 'B', 'C'], ['A', 'B', 'C']), 'Normal case');
+  assert.ok(utility.isSetsEqual([['A', 'B'], ['C'], ['D']], [['B', 'A'], ['D'], ['C']]), 'Normal case');
   assert.ok(utility.isSetsEqual([], []), 'Empty sets');
 
   assert.ok(!utility.isSetsEqual(['A', 'B', 'C', 'D'], ['C', 'A', 'B']), 'Subset case');
@@ -27,46 +34,52 @@ QUnit.test('utility.isSetsEqual', function (assert) {
 });
 
 QUnit.test('utility.isProperSubset test', function (assert) {
-  assert.ok(utility.isSubset(['A', 'B', 'C'], ['A']), 'Normal case');
-  assert.ok(utility.isSubset(['B'], []), 'Empty set');
+  assert.ok(utility.isProperSubset(['A', 'B', 'C'], ['A']), 'Normal case');
+  assert.ok(utility.isProperSubset(['B'], []), 'Empty set');
 
-  assert.ok(utility.isSubset(['A', 'B', 'C'], ['A', 'B', 'C']), 'Equal sets');
-  assert.ok(!utility.isSubset(['B', 'C'], ['A', 'B']), 'Extra element');
-  assert.ok(!utility.isSubset([], ['A']), 'Extra element');
+  assert.ok(!utility.isProperSubset(['A', 'B', 'C'], ['A', 'B', 'C']), 'Equal sets');
+  assert.ok(!utility.isProperSubset(['B', 'C'], ['A', 'B']), 'Extra element');
+  assert.ok(!utility.isProperSubset([], ['A']), 'Extra element');
 });
 
 QUnit.test('utility.getUnion test', function (assert) {
-  assert.deepEqual(utility.getUnion(['A', 'B'], ['C', 'D']), ['A', 'B', 'C', 'D'], '2 disjoint sets');
-  assert.deepEqual(utility.getUnion(['A', 'B', 'C'], ['C', 'D']), ['A', 'B', 'C', 'D'], '2 non-disjoint sets');
-  assert.deepEqual(utility.getUnion(['A', 'B'], ['A', 'B', 'C', 'D']), ['A', 'B', 'C', 'D'], 'Proper subset');
-  assert.deepEqual(utility.getUnion(['A', 'B', 'C', 'D'], ['A', 'B', 'C', 'D']), ['A', 'B', 'C', 'D'], 'Same sets');
-  assert.deepEqual(utility.getUnion(['A', 'B', 'C', 'D'], []), ['A', 'B', 'C', 'D'], 'One empty set');
+  assert.ok(utility.isSetsEqual(utility.getUnion(['A', 'B'], ['C', 'D']), ['A', 'B', 'C', 'D']), '2 disjoint sets');
+  assert.ok(utility.isSetsEqual(utility.getUnion([['A', 'B']], [['C', 'D']]), [['A', 'B'], ['C', 'D']]), '2 disjoint sets');
+  assert.ok(utility.isSetsEqual(utility.getUnion(['A', 'B', 'C'], ['C', 'D']), ['A', 'B', 'C', 'D']), '2 non-disjoint sets');
+  assert.ok(utility.isSetsEqual(utility.getUnion(['A', 'B'], ['A', 'B', 'C', 'D']), ['A', 'B', 'C', 'D']), 'Proper subset');
+  assert.ok(utility.isSetsEqual(utility.getUnion(['A', 'B', 'C', 'D'], ['A', 'B', 'C', 'D']), ['A', 'B', 'C', 'D']), 'Same sets');
+  assert.ok(utility.isSetsEqual(utility.getUnion(['A', 'B', 'C', 'D'], []), ['A', 'B', 'C', 'D']), 'One empty set');
 });
 
 QUnit.test('utility.getIntersection test', function (assert) {
-  assert.deepEqual(utility.getIntersection(['A', 'B'], ['A', 'C']), ['A'], 'proper intersection');
-  assert.deepEqual(utility.getIntersection(['A', 'B'], ['A', 'B', 'C']), ['A', 'B'], 'subset');
-  assert.deepEqual(utility.getIntersection(['A', 'B'], ['C', 'D']), [], 'nothing in command');
-  assert.deepEqual(utility.getIntersection(['A', 'B'], []), [], 'epmty set');
+  assert.ok(utility.isSetsEqual(utility.getIntersection(['A', 'B'], ['A', 'C']), ['A']), 'proper intersection');
+  assert.ok(utility.isSetsEqual(utility.getIntersection(['A', 'B'], ['A', 'B', 'C']), ['A', 'B']), 'subset');
+  assert.ok(utility.isSetsEqual(utility.getIntersection([['A', 'B']], [['A', 'B'], ['C']]), [['A', 'B']]), 'subset');
+  assert.ok(utility.isSetsEqual(utility.getIntersection(['A', 'B'], ['C', 'D']), []), 'nothing in command');
+  assert.ok(utility.isSetsEqual(utility.getIntersection(['A', 'B'], []), []), 'epmty set');
 });
 
 QUnit.test('utility.removeDuplicates test', function (assert) {
-  assert.deepEqual(utility.removeDuplicates(['A', 'B', 'A', 'A', 'C', 'B']), ['A', 'B', 'C'], 'normal case');
-  assert.deepEqual(utility.removeDuplicates(['A', 'A', 'A',]), ['A'], 'only one unique element');
-  assert.deepEqual(utility.removeDuplicates(['A', 'B', 'C']), ['A', 'B', 'C'], 'no duplicates');
-  assert.deepEqual(utility.removeDuplicates([]), [], 'empty input set');
+  assert.ok(utility.isSetsEqual(utility.removeDuplicates(['A', 'B', 'A', 'A', 'C', 'B']), ['A', 'B', 'C']), 'normal case');
+  assert.ok(utility.isSetsEqual(utility.removeDuplicates(['A', 'A', 'A',]), ['A']), 'only one unique element');
+  assert.ok(utility.isSetsEqual(utility.removeDuplicates(['A', 'B', 'C']), ['A', 'B', 'C']), 'no duplicates');
+  assert.ok(utility.isSetsEqual(utility.removeDuplicates([['A', 'B'], ['B', 'A'], ['C']]), [['A', 'B'], ['C']]), 'duplicate sets');
+  assert.ok(utility.isSetsEqual(utility.removeDuplicates([]), []), 'empty input set');
 });
 
 QUnit.test('utility.getDifference test', function (assert) {
-  assert.deepEqual(utility.getDifference(['A', 'B', 'C'], ['B']), ['A', 'C'], 'Subset');
-  assert.deepEqual(utility.getDifference(['A', 'B', 'C'], ['A', 'C', 'B']), [], 'Same sets');
-  assert.deepEqual(utility.getDifference(['A', 'B', 'C'], ['B', 'D']), ['A', 'C'], 'Extra elements');
-  assert.deepEqual(utility.getDifference(['A', 'B', 'C'], []), ['A', 'B', 'C'], 'Empty second set');
+  assert.ok(utility.isSetsEqual(utility.getDifference(['A', 'B', 'C'], ['B']), ['A', 'C']), 'Subset');
+  assert.ok(utility.isSetsEqual(utility.getDifference([['A', 'B'], ['C']], [['A', 'B']]), [['C']]), 'Subset');
+  assert.ok(utility.isSetsEqual(utility.getDifference(['A', 'B', 'C'], ['A', 'C', 'B']), []), 'Same sets');
+  assert.ok(utility.isSetsEqual(utility.getDifference(['A', 'B', 'C'], ['B', 'D']), ['A', 'C']), 'Extra elements');
+  assert.ok(utility.isSetsEqual(utility.getDifference(['A', 'B', 'C'], []), ['A', 'B', 'C']), 'Empty second set');
 });
 
 QUnit.test('utility.getAllSubsets test', function (assert) {
   assert.ok(utility.isSetsEqual(utility.getAllSubsets(['A', 'B', 'C']),
-    [['A'], ['B'], ['C'], ['A', 'B'], ['A', 'C'], ['B', 'C'], ['A', 'B', 'C']]), 'Proper test');
+    [[], ['A'], ['B'], ['C'], ['A', 'B'], ['A', 'C'], ['B', 'C'], ['A', 'B', 'C']]), 'Proper test');
+  assert.ok(utility.isSetsEqual(utility.getAllSubsets([['A'], ['B', 'C']]),
+    [[], [['A']], [['B', 'C']], [['A'], ['B', 'C']]]), 'Proper test');
 });
 
 QUnit.test('utility.getClosureForAttr single-attr-test', function (assert) {
