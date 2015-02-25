@@ -1,6 +1,10 @@
 /* global _: false */
 'use strict';
 var utility = (function () {
+  // 1. For all functions, sets can be array of strings,
+  //      array of fds and array of array of strings.
+  // 2. For any functions that require two set params,
+  //      symmetry of set is expected.
   var utility = {};
 
   // returns whether set contains elem
@@ -21,15 +25,38 @@ var utility = (function () {
   // remove duplicates in the given set and return the result
   // @set: []
   utility.removeDuplicates = function (set) {
-    return _.uniq(set);
+    if (!set || !set.length || (typeof set[0]) !== 'object') {
+      return _.uniq(set);
+    } else if ((typeof set[0]) === 'object' && set[0].length) {
+      return _.uniq(set, function (item) {
+        if (item.sort) {
+          console.log(item);
+        }
+        return JSON.stringify(item.sort());
+      });
+    }
+    return _.uniq(set, function (item) {
+      item.left.sort();
+      item.right.sort();
+      return JSON.stringify(item);
+    });
   };
 
   // return whether set2 is a subset of set1
   // @set1: []; @set2; []
   utility.isSubset = function (superset, subset) {
+    var isSub = true;
     superset = utility.removeDuplicates(superset);
     subset = utility.removeDuplicates(subset);
-    return _.intersection(superset, subset).length === subset.length;
+    if (superset.length && (typeof superset[0]) !== 'object') {
+      return _.intersection(superset, subset).length === subset.length;
+    }
+    _.forEach(subset, function (item) {
+      if (isSub && !utility.contains(superset, item)) {
+        isSub = false;
+      }
+    });
+    return isSub;
   };
 
   // return whether two sets are equals
@@ -51,25 +78,86 @@ var utility = (function () {
   // return the union of two sets
   // @set1: []; @set2: []
   utility.getUnion = function (set1, set2) {
+    var union = [];
     set1 = utility.removeDuplicates(set1);
     set2 = utility.removeDuplicates(set2);
-    return _.union(set1, set2);
+    if (set1.length && (typeof set1[0] !== 'object')) {
+      return _.union(set1, set2);
+    }
+    function iteretee(item) {
+      if (!utility.contains(union, item)) {
+        union.push(item);
+      }
+    }
+    _.forEach(set1, iteretee);
+    _.forEach(set2, iteretee);
+    return union;
   };
 
   // return the intersection of two sets
   // @set1: []; @set2: []
   utility.getIntersection = function (set1, set2) {
+    var intersection = [];
     set1 = utility.removeDuplicates(set1);
     set2 = utility.removeDuplicates(set2);
-    return _.intersection(set1, set2);
+    if (set1.length && (typeof set1[0] !== 'object')) {
+      return _.intersection(set1, set2);
+    }
+    function iteretee(item) {
+      if (utility.contains(set2, item)) {
+        intersection.push(item);
+      }
+    }
+    _.forEach(set1, iteretee);
+    return intersection;
   };
 
   // calculate set1 - set2 and return the result
   // @set1: []; @set2: []
   utility.getDifference = function (set1, set2) {
+    var diff = [];
     set1 = utility.removeDuplicates(set1);
     set2 = utility.removeDuplicates(set2);
-    return _.difference(set1, set2);
+    if (set1.length && (typeof set1[0] !== 'object')) {
+      return _.difference(set1, set2);
+    }
+    function iteretee(item) {
+      if (!utility.contains(set2, item)) {
+        diff.push(item);
+      }
+    }
+    _.forEach(set1, iteretee);
+    return diff;
+  };
+
+  // get all subsets of the input set
+  // @set: []
+  utility.getAllSubsets = function (set) {
+    var subsets = [];
+    var isUpdating = true;
+    var i;
+    var j;
+    var tmpsets = [];
+    var tmpset;
+    _.forEach(set, function (item) {
+      subsets.push([item]);
+    });
+    while (isUpdating) {
+      isUpdating = false;
+      tmpsets = [];
+      for (i = subsets.length - 1; i >= 0; i--) {
+        for (j = i; j >= 0; j--) {
+          tmpset = utility.getUnion(subsets[i], subsets[j]);
+          if (!utility.contains(subsets, tmpset)
+               && !utility.contains(tmpsets, tmpset)){
+            isUpdating = true;
+            tmpsets.push(tmpset);
+          }
+        }
+      }
+      subsets = utility.getUnion(subsets, tmpsets);
+    }
+    return subsets;
   };
 
   // get closure of the input attribute based on the input fds

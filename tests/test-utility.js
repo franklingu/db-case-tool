@@ -64,6 +64,11 @@ QUnit.test('utility.getDifference test', function (assert) {
   assert.deepEqual(utility.getDifference(['A', 'B', 'C'], []), ['A', 'B', 'C'], 'Empty second set');
 });
 
+QUnit.test('utility.getAllSubsets test', function (assert) {
+  assert.ok(utility.isSetsEqual(utility.getAllSubsets(['A', 'B', 'C']),
+    [['A'], ['B'], ['C'], ['A', 'B'], ['A', 'C'], ['B', 'C'], ['A', 'B', 'C']]), 'Proper test');
+});
+
 QUnit.test('utility.getClosureForAttr single-attr-test', function (assert) {
   var fds = [{
     left: ['A'],
@@ -270,16 +275,16 @@ QUnit.test('isSuperkeyForRelation', function (assert) {
     right: ['A'],
     type: 'fd'
   }];
-  assert.ok(utility.isSuperkeyForRelation(['A', 'C', 'D'], attrs, fds), "Candidate key 1");
-  assert.ok(utility.isSuperkeyForRelation(['B', 'C', 'D'], attrs, fds), "Candidate key 2");
-  assert.ok(utility.isSuperkeyForRelation(['E', 'C', 'D'], attrs, fds), "Candidate key 1");
-  assert.ok(utility.isSuperkeyForRelation(['A', 'C', 'D', 'E'], attrs, fds), "Superkey 1");
-  assert.ok(utility.isSuperkeyForRelation(['A', 'C', 'D', 'B'], attrs, fds), "Superkey 2");
-  assert.ok(utility.isSuperkeyForRelation(['A', 'B', 'C', 'D', 'E'], attrs, fds), "Superkey 3");
+  assert.ok(utility.isSuperkeyForRelation(['A', 'C', 'D'], attrs, fds), 'Candidate key 1');
+  assert.ok(utility.isSuperkeyForRelation(['B', 'C', 'D'], attrs, fds), 'Candidate key 2');
+  assert.ok(utility.isSuperkeyForRelation(['E', 'C', 'D'], attrs, fds), 'Candidate key 1');
+  assert.ok(utility.isSuperkeyForRelation(['A', 'C', 'D', 'E'], attrs, fds), 'Superkey 1');
+  assert.ok(utility.isSuperkeyForRelation(['A', 'C', 'D', 'B'], attrs, fds), 'Superkey 2');
+  assert.ok(utility.isSuperkeyForRelation(['A', 'B', 'C', 'D', 'E'], attrs, fds), 'Superkey 3');
 
-  assert.ok(!utility.isSuperkeyForRelation(['A', 'B', 'D'], attrs, fds), "Not superkey 1");
-  assert.ok(!utility.isSuperkeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), "Not superkey 2");
-  assert.ok(!utility.isSuperkeyForRelation(['A', 'B'], attrs, fds), "Not superkey 3");
+  assert.ok(!utility.isSuperkeyForRelation(['A', 'B', 'D'], attrs, fds), 'Not superkey 1');
+  assert.ok(!utility.isSuperkeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), 'Not superkey 2');
+  assert.ok(!utility.isSuperkeyForRelation(['A', 'B'], attrs, fds), 'Not superkey 3');
 });
 
 QUnit.test('isKeyForRelation', function (assert) {
@@ -297,16 +302,16 @@ QUnit.test('isKeyForRelation', function (assert) {
     right: ['A'],
     type: 'fd'
   }];
-  assert.ok(utility.isKeyForRelation(['A', 'C', 'D'], attrs, fds), "Candidate key 1");
-  assert.ok(utility.isKeyForRelation(['B', 'C', 'D'], attrs, fds), "Candidate key 2");
-  assert.ok(utility.isKeyForRelation(['E', 'C', 'D'], attrs, fds), "Candidate key 1");
+  assert.ok(utility.isKeyForRelation(['A', 'C', 'D'], attrs, fds), 'Candidate key 1');
+  assert.ok(utility.isKeyForRelation(['B', 'C', 'D'], attrs, fds), 'Candidate key 2');
+  assert.ok(utility.isKeyForRelation(['E', 'C', 'D'], attrs, fds), 'Candidate key 1');
 
-  assert.ok(!utility.isKeyForRelation(['A', 'C', 'D', 'E'], attrs, fds), "Superkey 1");
-  assert.ok(!utility.isKeyForRelation(['A', 'C', 'D', 'B'], attrs, fds), "Superkey 2");
-  assert.ok(!utility.isKeyForRelation(['A', 'B', 'C', 'D', 'E'], attrs, fds), "Superkey 3");
-  assert.ok(!utility.isKeyForRelation(['A', 'B', 'D'], attrs, fds), "Not Key 1");
-  assert.ok(!utility.isKeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), "Not Key 2");
-  assert.ok(!utility.isKeyForRelation(['A', 'B'], attrs, fds), "Not Key 3");
+  assert.ok(!utility.isKeyForRelation(['A', 'C', 'D', 'E'], attrs, fds), 'Superkey 1');
+  assert.ok(!utility.isKeyForRelation(['A', 'C', 'D', 'B'], attrs, fds), 'Superkey 2');
+  assert.ok(!utility.isKeyForRelation(['A', 'B', 'C', 'D', 'E'], attrs, fds), 'Superkey 3');
+  assert.ok(!utility.isKeyForRelation(['A', 'B', 'D'], attrs, fds), 'Not Key 1');
+  assert.ok(!utility.isKeyForRelation(['A', 'B', 'D', 'E'], attrs, fds), 'Not Key 2');
+  assert.ok(!utility.isKeyForRelation(['A', 'B'], attrs, fds), 'Not Key 3');
 });
 
 // a subtest for an incomplete function only
