@@ -3,6 +3,177 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+h1 {
+  padding: 0px;
+  font: 60px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  margin-left: 50px;
+}
+
+h2 {
+  padding: 2px;
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  bottom: 0px;
+}
+
+
+#step1 {
+  width: 790px;
+  height: 170px;
+  border: 1px solid black;
+}
+
+#step1_sub {
+  position: relative;
+  width: 786px;
+  height: 24px;
+  top: 1px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  //border: 1px solid black; 
+}
+
+.var_inputbox {
+  float: left;
+  //background: #f8f8f8;
+  //color: #000000;
+  cursor: text;
+  border: 0px;
+  margin: 3px;
+  resize: none;
+  outline: none;
+  font-family: "arial";
+  font-size: 18px;
+  padding: 1px;
+}
+
+.var_node {
+  background: rgb(33, 178, 102);
+  float: left;
+  border: 1px solid black;
+  width: 50px;
+  height: 22px;
+  margin: 3px;
+  font-family: "arial";
+  font-size: 18px;
+  padding: 1px;
+  border-radius: 4px;
+}
+
+#step2 {
+  width: 790px;
+  height: 240px;
+  border: 1px solid black;
+}
+
+#step2_lhs {
+  float: left;
+  position: relative;
+  top: 30px;
+  left: 30px;
+  width: 300px;
+  height: 180px;
+  border: 1px solid black;
+}
+
+#step2_arrow {
+  float: left;
+  position: relative;
+  top: 75px;
+  left: 45px;
+  width: 110px;
+  height: 110px;
+  //border: 1px solid black;
+}
+
+#step2_rhs {
+  float: right;
+  position: relative;
+  top: 30px;
+  right: 30px;
+  width: 300px;
+  height: 180px;
+  border: 1px solid black;
+}
+
+
+/* For Confirm/Clear buttons */
+.button {
+  //display: inline-block;
+  //float: right;
+  position: relative;
+  margin-left: 30px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  width: 150px;
+  height: 50px;
+  font-family: arial;
+  font-size: 20px;
+  background: #ffffff;
+  border:2px solid #1b9254;
+  border-radius: 6px;
+}
+
+
+#relation_output {
+  width: 785px;
+  height: 100px;
+  resize: none;
+}
+
+
+#select_option {
+  float: left;
+  height: 30px;
+  width: 90px;
+  margin: 10px;
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+
+/* For 1NF,2NF,3NF,BCNF buttons */
+.relation_option_button {
+  margin-left: 75px;
+  width: 100px;
+  height: 40px;
+  font-family: arial;
+  font-size: 15px;
+  background: #ffffff;
+  border:2px solid #1b9254;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+
+.boxes{
+  background: #f8f8f8;
+  border-bottom: #b7b7b7 3px solid;
+  border-left: #b7b7b7 3px solid;
+  border-right: #b7b7b7 3px solid;
+  border-top: #b7b7b7 solid;
+  color: #000000;
+  cursor: text;
+  font-family: "arial";
+  font-size: 14pt;
+  padding: 1px;
+}
+
+.button2{
+  position: relative;
+  margin-left: 75px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  width: 150px;
+  height: 50px;
+  font-family: arial;
+  font-size: 14px;
+  background: #ffffff;
+  border:2px solid #1b9254;
+  border-radius: 6px;
+  font-weight: bold;
 }
