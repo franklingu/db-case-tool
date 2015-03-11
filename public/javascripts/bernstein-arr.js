@@ -1,7 +1,7 @@
 /* global utility: false, _: false */
 'use strict';
 if (!window.utility) {
-  throw Error('dbtester requires utility to be defined in global scope first');
+  throw Error('bernstein requires utility to be defined in global scope first');
 }
 
 var bernstein = (function () {
@@ -9,6 +9,7 @@ var bernstein = (function () {
   bernstein.generateBernsteinAlgoResults = function (attrs, fds) {
     var attrSet = utility.removeDuplicates(attrs);
     var fdSet = utility.removeDuplicates(fds);
+    var grouped = {};
     var tables = [];
 
     function removeExtraneousAttrs() {
@@ -24,12 +25,14 @@ var bernstein = (function () {
         var subsets = utility.getAllSubsets(originalLeft);
         var closureBeforeSub = utility.getClosureForAttr(fd.left, fdSet);
         _.forEach(subsets, function (sub) {
+          var updatedLeft = fd.left;
           fd.left = sub;
           var cloureAfterSub = utility.getClosureForAttr(sub, fdSet);
-          if (utility.isSubset(cloureAfterSub, closureBeforeSub)) {
+          if (utility.isSubset(cloureAfterSub, closureBeforeSub)
+              && utility.isProperSubset(updatedLeft, sub)) {
             fd.left = sub;
           } else {
-            fd.left = originalLeft;
+            fd.left = updatedLeft;
           }
         });
       });
@@ -62,11 +65,32 @@ var bernstein = (function () {
     }
 
     function partition() {
-      
+      _.forEach(fdSet, function (fd) {
+        if (!_.has(grouped, fd.left)) {
+          grouped[fd.left.join(',')] = [fd];
+        } else {
+          grouped[fd.left.join(',')].push(fd);
+        }
+      });
     }
 
     function mergeEquivalentKeys() {
-      // TODO
+      function isTwoKeysEquivalent(key1, key2) {
+        return utility.isSetsEqual(utility.getClosureForAttr(key1, attrSet, fdSet),
+          utility.getClosureForAttr(key2, attrSet, fdSet));
+      }
+      var keys = _.keys(grouped);
+      function iteratee(key) {
+        function innerIteratee(anotherKey) {
+          if (key !== anotherKey && isTwoKeysEquivalent(key, anotherKey)) {
+            grouped[key] = utility.getUnion(grouped[key], grouped[anotherKey]);
+            grouped[anotherKey] = undefined;
+          }
+        }
+        _.forEach(keys, innerIteratee);
+      }
+      _.forEach(keys, iteratee);
+      keys = _.keys(grouped);
     }
 
     function eliminateTransitiveDependencies() {
@@ -74,7 +98,19 @@ var bernstein = (function () {
     }
 
     function generateTables() {
-      // TODO
+      function getTableFromFds(fds) {
+        var table = fds[0].left;
+        _.forEach(fds, function (fd) {
+          table = utility.getUnion(table, fd.right);
+        });
+        return table;
+      }
+      _.forOwn(grouped, function (value, key) {
+        if (!_.isUndefined(value)) {
+          var table = getTableFromFds(value);
+          tables.push(table);
+        }
+      });
     }
 
     function addBackLostAttrs() {
@@ -98,7 +134,8 @@ var bernstein = (function () {
     eliminateTransitiveDependencies();
     generateTables();
     addBackLostAttrs();
-
+    console.log('generated tables: ',tables);
     return tables;
   };
+  return bernstein;
 }());

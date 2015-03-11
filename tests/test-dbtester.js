@@ -1,4 +1,3 @@
-// TODO: complete the following function
 /* global QUnit: false, dbtester: false */
 'use strict';
 QUnit.test('dbtester.is2NF test', function (assert) {
