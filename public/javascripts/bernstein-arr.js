@@ -52,12 +52,14 @@ var bernstein = (function () {
         var subsets = utility.getAllSubsets(originalRight);
         var closureBeforeSub = utility.getClosureForAttr(fd.left, fdSet);
         _.forEach(subsets, function (sub) {
+          var updatedRight = fd.right;
           fd.right = sub;
           var cloureAfterSub = utility.getClosureForAttr(fd.left, fdSet);
-          if (utility.isSubset(cloureAfterSub, closureBeforeSub)) {
+          if (utility.isSubset(cloureAfterSub, closureBeforeSub)
+              && utility.isProperSubset(updatedRight, sub)) {
             fd.right = sub;
           } else {
-            fd.right = originalRight;
+            fd.right = updatedRight;
           }
         });
       });
@@ -95,6 +97,7 @@ var bernstein = (function () {
 
     function eliminateTransitiveDependencies() {
       // TODO
+      // http://en.wikipedia.org/wiki/Transitive_dependency
     }
 
     function generateTables() {
@@ -114,7 +117,23 @@ var bernstein = (function () {
     }
 
     function addBackLostAttrs() {
-      // TODO
+      var attrIsLost = true;
+      var fdLHS = [];
+      var lostAttrs = [];
+      _.forEach(tables, function (table) {
+        fdLHS = utility.getUnion(fdLHS, table);
+      });
+      if (!utility.isSetsEqual(fdLHS, attrs)) {
+        lostAttrs = utility.getDifference(attrs, fdLHS);
+        var keyOfAnotherTable = [];
+        var foundAnotherTable = false;
+        _.forOwn(grouped, function (value, key) {
+          if (!_.isUndefined(value) && !foundAnotherTable) {
+            keyOfAnotherTable = key.split(',');
+          }
+        });
+        tables.push(utility.getUnion(lostAttrs, keyOfAnotherTable));
+      }
     }
 
     function removeEmptyFds() {
