@@ -18,6 +18,11 @@ function equivalent(elem1, elem2, closure){
   return isSubsetOf(elem1,closure[b]) && isSubsetOf(elem2,closure[a]);
 }
 
+function isMemberOf(p, fd){
+  return isSubsetOf(p.right,getClosure(p.left,fd));
+}
+
+
 
 function PII(elem1, elem2){
   this.left = elem1;
@@ -93,123 +98,124 @@ function bitNumCmp(a, b){
 }
 
 
-
-var bernstein = (function () {
-  var bernstein = {};
-  bernstein.generateBernsteinAlgoResults = function (attrs, fds) {
-    var attrSet = utility.removeDuplicates(attrs);
-    var fdSet = utility.removeDuplicates(fds);
-    var tables = [];
-    var fd=fds;
-    var closure=getClosure(fd);
-
-    function removeExtraneousAttrs() {
-      // TODO
-      
-      // step 1, for each A->B, find the smallest subset of A
-      // such that A'->B is within the closure
-      for(var i=0;i<fd.size();i++){
-          var l=allSubsets(fd[i].left);
-          for(var j=0;j<l.size();j++)
-          if(isSubsetOf(fd[i].right,closure[l[j]])){
-             fd[i].left=l[j];
-             break;
-            }
-          }   
-
-
+function Bernstein(_fd){
+  var fd=_fd;
+  var closure=getClosure(fd);
+  // step 1, for each A->B, find the smallest subset of A
+  // such that A'->B is within the closure
+  for(var i=0;i<fd.size();i++){
+    var l=allSubsets(fd[i].left);
+    for(var j=0;j<l.size();j++)
+      if(isSubsetOf(fd[i].right,closure[l[j]])){
+        fd[i].left=l[j];
+        break;
+      }
+  }
+  //prvarFDs(fd,"Bernstein step 1");
+  // step 2, for each A->B, find the minimal subset of B such that
+  // replacing it with A->B' doesn't change closure
+  for(var i=0;i<fd.size();i++){
+    for(var j=0;(1<<j)<=fd[i].right;j++){
+      if((1<<j) & fd[i].right){
+        fd[i].right ^= (1<<j);
+        var p = PII(fd[i].left,1<<j);
+        if(!isMemberOf(p,fd))
+          fd[i].right |= (1<<j);
+      }
     }
-
-    function findCovering() {
-      // TODO
-      for(var i=0;i<fd.size();i++){
-          for(var j=0;(1<<j)<=fd[i].right;j++){
-              if((1<<j) & fd[i].right){
-                fd[i].right ^= (1<<j);
-                var p = PII(fd[i].left,1<<j);
-                if(!isMemberOf(p,fd))
-                   fd[i].right |= (1<<j);
-                }
-              }
+  }
+  removeEmptyFD(fd);
+  //prvarf("----------\n");
+  //prvarFDs(fd,"Bernstein step 2");
+  // step 3, group fds with the same lhs
+  sort(fd.begin(),fd.end());
+  for(var i=1;i<fd.size();){
+    if(fd[i].left == fd[i-1].left){
+      fd[i-1].right |= fd[i].right;
+      fd.erase(fd.begin()+i);
+    }else{
+      i++;
+    }
+  }
+  //prvarf("----------\n");
+  //prvarFDs(fd,"Bernstein step 3");
+  // set 4, find equivalent lhs, group them together
+  var J;
+  var H;
+  for(var i=0;i<fd.size();i++)
+    for(var j=i+1;j<fd.size();j++)
+      if(equivalent(fd[i].left,fd[j].left,closure)){
+        J.push_back(PII(fd[i].left,fd[j].left));
+        J.push_back(PII(fd[j].left,fd[i].left));
+      }
+  for(var i=0;i<fd.size();i++){
+    var id=-1;
+    for(var j=0;j<H.size();j++){
+      if(equivalent(H[j][0].left,fd[i].left,closure)){
+        id=j;
+        break;
+      }
+    }
+    if(id==-1){
+      //bug
+  //    H.push_back(var(1,fd[i]));
+    }else{
+      //bug
+  //    H[id].push_back(fd[i]);
+    }
+  }
+  for(var i=0;i<H.size();i++){
+    var t=0;
+    for(var j=0;j<H[i].size();j++)
+      t|=H[i][j].left;
+    for(var j=0;j<H[i].size();j++)
+      H[i][j].right=setExclude(H[i][j].right,t);
+    removeEmptyFD(H[i]);
+  }
+  //prvarf("----------\n");
+  //prvarf("Bernstein step 4\n");
+  //prvarFDs(J,"J");
+  for(var i=0;i<H.size();i++){
+    var name;
+    //sprvarf(name,"H%d",i+1);
+    //prvarFDs(H[i],name);
+  }
+  // step 5, for each H[i], eliminate rhs attributes as much as possible without changing
+  // closure of H union J
+  var HJ;
+  for(var i=0;i<H.size();i++) HJ.insert(HJ.end(),H[i].begin(),H[i].end());
+  HJ.insert(HJ.end(),J.begin(),J.end());
+  var ct=0;
+  for(var i=0;i<H.size();i++){
+    for(var j=0;j<H[i].size();j++){
+      assert(HJ[ct].left==H[i][j].left);
+      assert(HJ[ct].right==H[i][j].right);
+      var rhs=H[i][j].right;
+      for(var k=1;k<=rhs;k<<=1){
+        if(rhs & k){
+          HJ[ct].right ^= k;
+          if(isMemberOf(PII(H[i][j].left,k),HJ)){
+            H[i][j].right ^= k;
+          }else{
+            HJ[ct].right |= k;
           }
-          removeEmptyFD(fd);
+        }
+      }
+      ct++;
     }
-
-    function partition() {
-      // TODO
-      sort(fd.begin(),fd.end());
-      for(var i=1;i<fd.size();){
-          if(fd[i].left == fd[i-1].left){
-             fd[i-1].right |= fd[i].right;
-             fd.erase(fd.begin()+i);
-            }else{
-                 i++;
-            }
-         }
-    }
-
-    function mergeEquivalentKeys() {
-      // TODO
-      var J;
-      var H;
-      for(var i=0;i<fd.size();i++)
-         for(var j=i+1;j<fd.size();j++)
-         if(equivalent(fd[i].left,fd[j].left,closure)){
-           J.push_back(PII(fd[i].left,fd[j].left));
-           J.push_back(PII(fd[j].left,fd[i].left));
-           }
-         for(var i=0;i<fd.size();i++){
-             var id=-1;
-             for(var j=0;j<H.size();j++){
-                if(equivalent(H[j][0].left,fd[i].left,closure)){
-                   id=j;
-                   break;
-                  }
-                }
-
-          }
-         for(var i=0;i<H.size();i++){
-             var t=0;
-             for(var j=0;j<H[i].size();j++)
-                t|=H[i][j].left;
-                for(var j=0;j<H[i].size();j++)
-                    H[i][j].right=setExclude(H[i][j].right,t);
-                    removeEmptyFD(H[i]);
-            }
-
-    }
-
-    function eliminateTransitiveDependencies() {
-      // TODO
-      var HJ;
-      for(var i=0;i<H.size();i++) HJ.insert(HJ.end(),H[i].begin(),H[i].end());
-          HJ.insert(HJ.end(),J.begin(),J.end());
-          var ct=0;
-          for(var i=0;i<H.size();i++){
-             for(var j=0;j<H[i].size();j++){
-                 assert(HJ[ct].left==H[i][j].left);
-                 assert(HJ[ct].right==H[i][j].right);
-                 var rhs=H[i][j].right;
-                 for(var k=1;k<=rhs;k<<=1){
-                    if(rhs & k){
-                      HJ[ct].right ^= k;
-                      if(isMemberOf(PII(H[i][j].left,k),HJ)){
-                         H[i][j].right ^= k;
-                        }
-                      else{
-                          HJ[ct].right |= k;
-                          }
-                                }
-                    }
-                   ct++;
-                }
-             }
-    }
-
-    function generateTables() {
-      // TODO
-      for(var i=0;i<H.size();i++)
-      for(var j=0;j<H[i].size();j++)
+  }
+  //prvarf("----------\n");
+  //prvarf("Bernstein step 5\n");
+  //prvarFDs(J,"J");
+  for(var i=0;i<H.size();i++){
+    var name;
+    //sprvarf(name,"H%d",i+1);
+    //prvarFDs(H[i],name);
+  }
+  //step 6 
+  // Add corresponding FD in J varo H[i]
+  for(var i=0;i<H.size();i++)
+    for(var j=0;j<H[i].size();j++)
       for(var k=0;k<J.size();)
         if(J[k].left == H[i][j].left){
           H[i].push_back(J[k]);
@@ -218,42 +224,190 @@ var bernstein = (function () {
           k++;
         }
         
-      for(var i=0;i<H.size();i++) removeEmptyFD(H[i]);
-      }
-
-
-
-      //push into tables
-      for(var i=0;i<H.size();i++){
-    
-          var attr=0;
-          for(var j=0;j<H[i].size();j++){
-             attr |= H[i][j].left;
-             attr |= H[i][j].right;
-          }
-          //cout<<"Attributes: "<<set2str(attr)<<endl;
-          var ckeys = getCandidateKeys(attr,closure);
-          //cout<<"Candidate Keys: ";
-          for(var i=0;i<ckeys.size();i++){
-          if(i)cout<<", ";
-             cout<<set2str(ckeys[i]);
-        }
-        cout<<endl;
-        tables[i]=attr;
-      }
-
-    function addBackLostAttrs() {
-      // TODO
+  for(var i=0;i<H.size();i++) removeEmptyFD(H[i]);
+  //prvarf("----------\n");
+  //prvarf("Bernstein step 6: %d tables\n",H.size());
+  var tables;
+  for(var i=0;i<H.size();i++){
+    //prvarf("table %d\n",i+1);
+    var attr=0;
+    for(var j=0;j<H[i].size();j++){
+      attr |= H[i][j].left;
+      attr |= H[i][j].right;
     }
+    cout<<"Attributes: "<<set2str(attr)<<endl;
+    var ckeys = getCandidateKeys(attr,closure);
+    cout<<"Candidate Keys: ";
+    for(var i=0;i<ckeys.size();i++){
+      if(i)cout<<", ";
+      cout<<set2str(ckeys[i]);
+    }
+    cout<<endl;
+    tables.push_back(attr);
+  }
+}
 
-    removeExtraneousAttrs();
-    findCovering();
-    partition();
-    mergeEquivalentKeys();
-    eliminateTransitiveDependencies();
-    generateTables();
-    addBackLostAttrs();
 
-    return tables;
-  };
-}());
+// var bernstein = (function () {
+//   var bernstein = {};
+//   bernstein.generateBernsteinAlgoResults = function (attrs, fds) {
+//     var attrSet = utility.removeDuplicates(attrs);
+//     var fdSet = utility.removeDuplicates(fds);
+//     var tables = [];
+//     var fd=fds;
+//     var closure=getClosure(fd);
+
+//     function removeExtraneousAttrs() {
+//       // TODO
+      
+//       // step 1, for each A->B, find the smallest subset of A
+//       // such that A'->B is within the closure
+//       for(var i=0;i<fd.size();i++){
+//           var l=allSubsets(fd[i].left);
+//           for(var j=0;j<l.size();j++)
+//           if(isSubsetOf(fd[i].right,closure[l[j]])){
+//              fd[i].left=l[j];
+//              break;
+//             }
+//           }   
+
+
+//     }
+
+//     function findCovering() {
+//       // TODO
+//       for(var i=0;i<fd.size();i++){
+//           for(var j=0;(1<<j)<=fd[i].right;j++){
+//               if((1<<j) & fd[i].right){
+//                 fd[i].right ^= (1<<j);
+//                 var p = PII(fd[i].left,1<<j);
+//                 if(!isMemberOf(p,fd))
+//                    fd[i].right |= (1<<j);
+//                 }
+//               }
+//           }
+//           removeEmptyFD(fd);
+//     }
+
+//     function partition() {
+//       // TODO
+//       sort(fd.begin(),fd.end());
+//       for(var i=1;i<fd.size();){
+//           if(fd[i].left == fd[i-1].left){
+//              fd[i-1].right |= fd[i].right;
+//              fd.erase(fd.begin()+i);
+//             }else{
+//                  i++;
+//             }
+//          }
+//     }
+
+//     function mergeEquivalentKeys() {
+//       // TODO
+//       var J;
+//       var H;
+//       for(var i=0;i<fd.size();i++)
+//          for(var j=i+1;j<fd.size();j++)
+//          if(equivalent(fd[i].left,fd[j].left,closure)){
+//            J.push_back(PII(fd[i].left,fd[j].left));
+//            J.push_back(PII(fd[j].left,fd[i].left));
+//            }
+//          for(var i=0;i<fd.size();i++){
+//              var id=-1;
+//              for(var j=0;j<H.size();j++){
+//                 if(equivalent(H[j][0].left,fd[i].left,closure)){
+//                    id=j;
+//                    break;
+//                   }
+//                 }
+
+//           }
+//          for(var i=0;i<H.size();i++){
+//              var t=0;
+//              for(var j=0;j<H[i].size();j++)
+//                 t|=H[i][j].left;
+//                 for(var j=0;j<H[i].size();j++)
+//                     H[i][j].right=setExclude(H[i][j].right,t);
+//                     removeEmptyFD(H[i]);
+//             }
+
+//     }
+
+//     function eliminateTransitiveDependencies() {
+//       // TODO
+//       var HJ;
+//       for(var i=0;i<H.size();i++) HJ.insert(HJ.end(),H[i].begin(),H[i].end());
+//           HJ.insert(HJ.end(),J.begin(),J.end());
+//           var ct=0;
+//           for(var i=0;i<H.size();i++){
+//              for(var j=0;j<H[i].size();j++){
+//                  assert(HJ[ct].left==H[i][j].left);
+//                  assert(HJ[ct].right==H[i][j].right);
+//                  var rhs=H[i][j].right;
+//                  for(var k=1;k<=rhs;k<<=1){
+//                     if(rhs & k){
+//                       HJ[ct].right ^= k;
+//                       if(isMemberOf(PII(H[i][j].left,k),HJ)){
+//                          H[i][j].right ^= k;
+//                         }
+//                       else{
+//                           HJ[ct].right |= k;
+//                           }
+//                                 }
+//                     }
+//                    ct++;
+//                 }
+//              }
+//     }
+
+//     function generateTables() {
+//       // TODO
+//       for(var i=0;i<H.size();i++)
+//       for(var j=0;j<H[i].size();j++)
+//       for(var k=0;k<J.size();)
+//         if(J[k].left == H[i][j].left){
+//           H[i].push_back(J[k]);
+//           J.erase(J.begin()+k);
+//         }else{
+//           k++;
+//         }
+        
+//       for(var i=0;i<H.size();i++) removeEmptyFD(H[i]);
+//       }
+
+
+
+//       //push into tables
+//       for(var i=0;i<H.size();i++){
+    
+//           var attr=0;
+//           for(var j=0;j<H[i].size();j++){
+//              attr |= H[i][j].left;
+//              attr |= H[i][j].right;
+//           }
+//           //cout<<"Attributes: "<<set2str(attr)<<endl;
+//           var ckeys = getCandidateKeys(attr,closure);
+//           //cout<<"Candidate Keys: ";
+//           for(var i=0;i<ckeys.size();i++){
+//           if(i)cout<<", ";
+//              cout<<set2str(ckeys[i]);
+//         }
+//         cout<<endl;
+//         tables[i]=attr;
+//       }
+
+//     function addBackLostAttrs() {
+//       // TODO
+//     }
+
+//     removeExtraneousAttrs();
+//     findCovering();
+//     partition();
+//     mergeEquivalentKeys();
+//     eliminateTransitiveDependencies();
+//     generateTables();
+//     addBackLostAttrs();
+
+//     return tables;
+//   };
+// }());
