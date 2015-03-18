@@ -92,12 +92,29 @@ var bernstein = (function () {
         _.forEach(keys, innerIteratee);
       }
       _.forEach(keys, iteratee);
-      keys = _.keys(grouped);
     }
 
     function eliminateTransitiveDependencies() {
-      // TODO
-      // http://en.wikipedia.org/wiki/Transitive_dependency
+      // TODO: to be tested
+      // A -> B, B -> C, A -> C
+      var fdsToBeRemoved = [];
+      _.forEach(fdSet, function (fd) {
+        _.forEach(fdSet, function (fd1) {
+          var fdToCheck;
+          if (utility.isSetsEqual(fd.left, fd1.left)
+              && !utility.isSetsEqual(fd.right, fd1.right)) {
+            fdToCheck = {left: fd.left, right: fd1.right, type: 'FD'};
+            if (utility.contains(fdSet, fdToCheck)
+                && !utility.contains(fdsToBeRemoved, fd1)) {
+              fdsToBeRemoved.push(fdToCheck);
+            }
+          }
+        });
+      });
+      _.forEach(fdsToBeRemoved, function (fdToRemove) {
+        grouped[fdToRemove.left.join(',')] = utility.getDifference(
+          grouped[fdToRemove.left.join(',')], [fdToRemove]);
+      });
     }
 
     function generateTables() {
