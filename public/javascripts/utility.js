@@ -12,7 +12,7 @@ var utility = (function () {
   // @set: []; elem: any
   utility.contains = function (set, elem) {
     var isContaining = false;
-    if (typeof elem !== 'object') {
+    if (!_.isObject(elem)) {
       return _.indexOf(set, elem) !== -1;
     }
     _.forEach(set, function (item) {
@@ -26,9 +26,9 @@ var utility = (function () {
   // remove duplicates in the given set and return the result
   // @set: []
   utility.removeDuplicates = function (set) {
-    if (!set || !set.length || (typeof set[0]) !== 'object') {
+    if (!set || !set.length || !_.isObject(set[0])) {
       return _.uniq(set);
-    } else if ((typeof set[0]) === 'object' && set[0].length >= 0) {
+    } else if (_.isArray(set[0])) {
       return _.uniq(set, function (item) {
         return JSON.stringify(item.sort());
       });
@@ -46,7 +46,7 @@ var utility = (function () {
     var isSub = true;
     superset = utility.removeDuplicates(superset);
     subset = utility.removeDuplicates(subset);
-    if (superset.length && (typeof superset[0]) !== 'object') {
+    if (superset.length && !_.isObject(superset[0])) {
       return _.intersection(superset, subset).length === subset.length;
     }
     _.forEach(subset, function (item) {
@@ -79,7 +79,7 @@ var utility = (function () {
     var union = [];
     set1 = utility.removeDuplicates(set1);
     set2 = utility.removeDuplicates(set2);
-    if (set1.length && (typeof set1[0] !== 'object')) {
+    if (set1.length && !_.isObject(set1[0])) {
       return _.union(set1, set2);
     }
     function iteretee(item) {
@@ -98,7 +98,7 @@ var utility = (function () {
     var intersection = [];
     set1 = utility.removeDuplicates(set1);
     set2 = utility.removeDuplicates(set2);
-    if (set1.length && (typeof set1[0] !== 'object')) {
+    if (set1.length && !_.isObject(set1[0])) {
       return _.intersection(set1, set2);
     }
     function iteretee(item) {
@@ -116,7 +116,7 @@ var utility = (function () {
     var diff = [];
     set1 = utility.removeDuplicates(set1);
     set2 = utility.removeDuplicates(set2);
-    if (set1.length && (typeof set1[0] !== 'object')) {
+    if (set1.length && !_.isObject(set1[0])) {
       return _.difference(set1, set2);
     }
     function iteretee(item) {
