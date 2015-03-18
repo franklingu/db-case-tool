@@ -103,7 +103,7 @@ var bernstein = (function () {
           var fdToCheck;
           if (utility.isSetsEqual(fd.left, fd1.left)
               && !utility.isSetsEqual(fd.right, fd1.right)) {
-            fdToCheck = {left: fd.left, right: fd1.right, type: 'FD'};
+            fdToCheck = {left: fd.left, right: fd1.right, type: 'fd'};
             if (utility.contains(fdSet, fdToCheck)
                 && !utility.contains(fdsToBeRemoved, fd1)) {
               fdsToBeRemoved.push(fdToCheck);
