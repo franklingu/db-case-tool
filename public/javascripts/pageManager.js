@@ -2,12 +2,38 @@
 // Name: Zhou Bin
 // Date: 10 Mar, 2015
 // ------------------------------------
-
+// $(document).ready(function(){
+ 
+    // function to show popup screen
+    function showPopup(){
+        var docHeight = $(document).height(); //grab the height of the page
+        var scrollTop = $(window).scrollTop(); //grab the px value from the top of the page to where you're scrolling
+        $('.overlay-bg').show().css({'height' : docHeight}); //display your popup background and set height to the page height
+        $('.popup').show().css({'top': scrollTop+20+'px'}); //show the appropriate popup and set the content 20px from the window top
+    }
+ 
+    // function to close our popups
+    function closePopup(){
+        $('.overlay-bg, .overlay-content').hide(); //hide the overlay
+    }
+   
+    // hide popup when user clicks on close button or if user clicks anywhere outside the container
+    $('.close-btn, .overlay-bg').click(function(){
+        closePopup();
+    });
+     
+    // hide the popup when user presses the esc key
+    $(document).keyup(function(e) {
+        if (e.keyCode == 27) { // if user presses esc key
+            closePopup();
+        }
+    });
 
 // ------------------------------------
 // Check the input variable, when detect ',', create a new variable node
 // ------------------------------------
 document.onkeydown=checkKey;
+
 function checkKey(e) {
     var event = window.event ? window.event : e;
     //alert("here");
@@ -15,48 +41,48 @@ function checkKey(e) {
         //alert(event.keyCode)
         if(event.keyCode == 188) { 
 
-        	// check which one is in use
-        	var input = document.getElementById(e.target.id); // it does not include ','
+            // check which one is in use
+            var input = document.getElementById(e.target.id); // it does not include ','
             if(input.value.length == 0 || input.value==' ') return;
-        	var origin_value = input.value;
-        	var input_length = origin_value.length;
-        	var origin_class_name = input.className;
-        	var origin_id = input.id;
-        	//var origin_length = input.maxlength;
-        	//var origin_size = input.size;
+            var origin_value = input.value;
+            var input_length = origin_value.length;
+            var origin_class_name = input.className;
+            var origin_id = input.id;
+            //var origin_length = input.maxlength;
+            //var origin_size = input.size;
 
-        	// Create a div
-        	var newDiv = document.createElement('div');
-        	newDiv.draggable="true"; 
-        	newDiv.setAttribute('ondragstart', 'drag(event)');
-        	newDiv.align = 'center';
-        	newDiv.className = 'var_node';
-        	newDiv.innerHTML = origin_value;
+            // Create a div
+            var newDiv = document.createElement('div');
+            newDiv.draggable="true"; 
+            newDiv.setAttribute('ondragstart', 'drag(event)');
+            newDiv.align = 'center';
+            newDiv.className = 'var_node';
+            newDiv.innerHTML = origin_value;
 
-        	var temp = document.getElementById(input.parentNode.id).childNodes.length;
-        	var temp2 = 'var_node' + temp;
-        	newDiv.id = temp2;
+            var temp = document.getElementById(input.parentNode.id).childNodes.length;
+            var temp2 = 'var_node' + temp;
+            newDiv.id = temp2;
 
-        	var temp = input_length * 15;
-        	var tempS = temp + 'px';
-        	newDiv.setAttribute('style', 'width:'+tempS);
-        	document.getElementById(input.parentNode.id).appendChild(newDiv);	
+            var temp = input_length * 15;
+            var tempS = temp + 'px';
+            newDiv.setAttribute('style', 'width:'+tempS);
+            document.getElementById(input.parentNode.id).appendChild(newDiv);   
 
-        	// Create a new input_box for input
-        	var newInput = document.createElement('input');
-        	newInput.id = origin_id;
-        	newInput.className = origin_class_name;
-        	newInput.type = 'text';
+            // Create a new input_box for input
+            var newInput = document.createElement('input');
+            newInput.id = origin_id;
+            newInput.className = origin_class_name;
+            newInput.type = 'text';
             newInput.setAttribute('autofocus', 'autofocus');
-        	//newInput.maxlength = origin_length - input_length;
-        	//newInput.size = origin_size - 2*input_length;
-        	document.getElementById(input.parentNode.id).appendChild(newInput);
+            //newInput.maxlength = origin_length - input_length;
+            //newInput.size = origin_size - 2*input_length;
+            document.getElementById(input.parentNode.id).appendChild(newInput);
 
-        	// Remove old div
-        	document.getElementById(e.target.id).remove();
+            // Remove old div
+            document.getElementById(e.target.id).remove();
 
-        	// test purpose
-        	//alert(input.value + input.value.length);
+            // test purpose
+            //alert(input.value + input.value.length);
         }
     }
 }
@@ -66,7 +92,7 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-	ev.dataTransfer.setData("text", ev.target.id);
+    ev.dataTransfer.setData("text", ev.target.id);
 }
 
 function drop(ev) {
@@ -89,9 +115,9 @@ function drop(ev) {
 function addRelation () {
     var lhs = document.getElementById('step2_lhs');
     var rhs = document.getElementById('step2_rhs');
-	var output = document.getElementById('relation_output');
+    var output = document.getElementById('relation_output');
 
-	if(lhs.childNodes.length==0 || rhs.childNodes.length==0) {
+    if(lhs.childNodes.length==0 || rhs.childNodes.length==0) {
         alert("Cannot be empty.");
         return;
     }
@@ -146,9 +172,9 @@ function clearRelations () {
 // Clear all the relations in the "relation_output"
 // ------------------------------------
 function clearRelationOutputs () {
-	var output = document.getElementById('relation_output');
+    var output = document.getElementById('relation_output');
 
-	output.value = null;
+    output.value = null;
 }
 
 
@@ -174,19 +200,20 @@ function updateFeatures (index) {
 // Chose relations option. (1NF, 2NF, 3NF, BCNF)
 // ------------------------------------
 function choseRelationOption (temp) {
-	//var test = document.getElementById('confirm_button');
-	//test.value = "good";
-	//test.style.fontSize = '10px';
+    //var test = document.getElementById('confirm_button');
+    //test.value = "good";
+    //test.style.fontSize = '10px';
 
-	if(temp.style.backgroundColor == '')
-		temp.style.backgroundColor = 'rgb(255, 255, 255)';
+    if(temp.style.backgroundColor == '')
+        temp.style.backgroundColor = 'rgb(255, 255, 255)';
 
-	if(temp.style.backgroundColor == 'rgb(255, 255, 255)') {
-		temp.style.backgroundColor = '#1b9254';
-		temp.setAttribute('chosen', 1);
-	} else {
-		temp.style.backgroundColor = '#ffffff';
-		temp.setAttribute('chosen', 0);
-	}		
+    if(temp.style.backgroundColor == 'rgb(255, 255, 255)') {
+        temp.style.backgroundColor = '#1b9254';
+        temp.setAttribute('chosen', 1);
+    } else {
+        temp.style.backgroundColor = '#ffffff';
+        temp.setAttribute('chosen', 0);
+    }       
 }
+
 

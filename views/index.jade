@@ -70,7 +70,23 @@ block content
   div(id='feature2', style='display:none')
     // Third step.
     h2 Step 3: Design your table.
-    button(id='add_table', class='button2', onClick='') Add New Table
+    button(id='add_table', class='button2', onclick='showPopup()') Add New Table
+
+  div(class="overlay-bg")
+  div(class="overlay-content popup")
+    form(name="input", action="action_page.php", method="get")
+      | Table Name:
+      input(type="text", name="tableName")
+      br
+      | Choose Attributes:
+      select(multiple class="form-control")
+        option="Matric Number"
+        option="Name"
+        option="Age"
+      br
+      br
+    input(class="button2", type="submit", value="Submit")
+    button(class="button2", onclick='closePopup()') Close
 
   br
   br
