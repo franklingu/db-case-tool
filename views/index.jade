@@ -1,9 +1,12 @@
 extends layout
 
 block content
+
   img(src='/images/icon.png', style='float:left;')
   h1= title
-  br  
+  br
+
+  
   div
     // Frist step.
     h2 Step 1: Enter your attributes one by one, separate them using comma.
@@ -11,11 +14,16 @@ block content
     div(id='step1')
       div(id='step1_sub')
         input(id='var_inputbox1', type="text", class='var_inputbox', autofocus='autofocus') 
+      //div(id='step1_sub')
+        //div(id='var_node1', class='var_node' ,draggable="true", ondragstart="drag(event)") test
+        //input(id='var_inputbox1', type="text", class='var_inputbox', size='85', maxlength='70')
+        //textarea(id='var_inputbox5', class='var_inputbox', rows='1', cols='85', inUse=0)
         
     button(id='clear_variables', class='button', onclick='clearVariables()', style='left:600px') Clear 
   br
   br
   br
+
 
   div
     // Second step.
@@ -37,6 +45,7 @@ block content
   br
   br
   br
+
 
   div(id='feature selection')
     div
@@ -61,10 +70,28 @@ block content
   div(id='feature2', style='display:none')
     // Third step.
     h2 Step 3: Design your table.
-    button(id='add_table', class='button2', onClick='') Add New Table
+    button(id='add_table', class='button2', onclick='showPopup()') Add New Table
+
+  div(class="overlay-bg")
+  div(class="overlay-content popup")
+    form(name="input", action="action_page.php", method="get")
+      | Table Name:
+      input(type="text", name="tableName")
+      br
+      | Choose Attributes:
+      select(multiple class="form-control")
+        option="Matric Number"
+        option="Name"
+        option="Age"
+      br
+      br
+    input(class="button2", type="submit", value="Submit")
+    button(class="button2", onclick='closePopup()') Close
+
   br
   br
   br
+
 
   div
     h2 Step 4: Process
@@ -73,10 +100,28 @@ block content
   br
   br
 
+
+
+
   div
     h2 Step 5: Results
   br
   br
 
-  script(type='text/javascript' src='javascript/utility.js')
-  script(type='text/javascript' src='javascript/dbtester.js')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
