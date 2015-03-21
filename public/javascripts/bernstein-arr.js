@@ -26,7 +26,6 @@ var bernstein = (function () {
         var closureBeforeSub = utility.getClosureForAttr(fd.left, fdSet);
         _.forEach(subsets, function (sub) {
           var updatedLeft = fd.left;
-          fd.left = sub;
           var cloureAfterSub = utility.getClosureForAttr(sub, fdSet);
           if (utility.isSubset(cloureAfterSub, closureBeforeSub)
               && utility.isProperSubset(updatedLeft, sub)) {
@@ -78,13 +77,16 @@ var bernstein = (function () {
 
     function mergeEquivalentKeys() {
       function isTwoKeysEquivalent(key1, key2) {
-        return utility.isSetsEqual(utility.getClosureForAttr(key1, attrSet, fdSet),
-          utility.getClosureForAttr(key2, attrSet, fdSet));
+        var key1Attr = key1.split(',');
+        var key2Attr = key2.split(',');
+        return utility.isSetsEqual(utility.getClosureForAttr(key1Attr, fdSet),
+          utility.getClosureForAttr(key2Attr, fdSet));
       }
       var keys = _.keys(grouped);
       function iteratee(key) {
         function innerIteratee(anotherKey) {
-          if (key !== anotherKey && isTwoKeysEquivalent(key, anotherKey)) {
+          if (key !== anotherKey && !_.isUndefined(grouped[key])
+              && !_.isUndefined(grouped[anotherKey]) && isTwoKeysEquivalent(key, anotherKey)) {
             grouped[key] = utility.getUnion(grouped[key], grouped[anotherKey]);
             grouped[anotherKey] = undefined;
           }
@@ -101,8 +103,8 @@ var bernstein = (function () {
       _.forEach(fdSet, function (fd) {
         _.forEach(fdSet, function (fd1) {
           var fdToCheck;
-          if (utility.isSetsEqual(fd.left, fd1.left)
-              && !utility.isSetsEqual(fd.right, fd1.right)) {
+          if (utility.isSubset(fd.left, fd1.left)
+              && !utility.isSubset(fd.right, fd1.right)) {
             fdToCheck = {left: fd.left, right: fd1.right, type: 'fd'};
             if (utility.contains(fdSet, fdToCheck)
                 && !utility.contains(fdsToBeRemoved, fd1)) {
@@ -124,6 +126,7 @@ var bernstein = (function () {
         }
         var table = fds[0].left;
         _.forEach(fds, function (fd) {
+          table = utility.getUnion(table, fd.left);
           table = utility.getUnion(table, fd.right);
         });
         return table;
