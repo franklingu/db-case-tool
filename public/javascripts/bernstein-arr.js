@@ -119,6 +119,9 @@ var bernstein = (function () {
 
     function generateTables() {
       function getTableFromFds(fds) {
+        if (!fds.length) {
+          return [];
+        }
         var table = fds[0].left;
         _.forEach(fds, function (fd) {
           table = utility.getUnion(table, fd.right);
@@ -128,7 +131,9 @@ var bernstein = (function () {
       _.forOwn(grouped, function (value, key) {
         if (!_.isUndefined(value)) {
           var table = getTableFromFds(value);
-          tables.push(table);
+          if (table.length) {
+            tables.push(table);
+          }
         }
       });
     }

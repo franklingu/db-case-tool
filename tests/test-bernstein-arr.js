@@ -12,7 +12,7 @@ QUnit.test('basic test bernsteins', function (assert) {
     right: ['E', 'C'],
     type: 'fd'
   }];
-  assert.deepEqual(bernstein.generateBernsteinAlgoResults(attrs, fds), [['A', 'B', 'D', 'C', 'E']], 'No change to the table');
+  assert.deepEqual(bernstein.generateBernsteinAlgoResults(attrs, fds), [['A', 'B', 'C', 'D', 'E']], 'No change to the table');
 
   fds = [{
     left: ['A', 'B'],
