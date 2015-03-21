@@ -1,6 +1,16 @@
-/* global QUnit: false, bernstein: false */
+/* global QUnit: false, _: false, bernstein: false */
 'use strict';
-// TODO: use set comparison instead for this test
+function assertIsTwoTableResultsEqual(assert, tables1, tables2) {
+  function iteratee(table) {
+    table.sort();
+  }
+  _.forEach(tables1, iteratee);
+  _.forEach(tables2, iteratee);
+  tables1.sort();
+  tables2.sort();
+  assert.deepEqual(tables1, tables2);
+}
+
 QUnit.test('basic test bernsteins', function (assert) {
   var attrs;
   var fds;
@@ -14,7 +24,8 @@ QUnit.test('basic test bernsteins', function (assert) {
     right: ['E', 'C'],
     type: 'fd'
   }];
-  assert.deepEqual(bernstein.generateBernsteinAlgoResults(attrs, fds), [['A', 'B', 'C', 'D', 'E']], 'No change to the table');
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+    [['A', 'B', 'D', 'C', 'E']], 'No change to the table');
 
   fds = [{
     left: ['A', 'B'],
@@ -25,11 +36,13 @@ QUnit.test('basic test bernsteins', function (assert) {
     right: ['E'],
     type: 'fd'
   }];
-  assert.deepEqual(bernstein.generateBernsteinAlgoResults(attrs, fds), [['A', 'B', 'D'], ['A', 'B', 'C', 'E']], 'Basic decompose');
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+    [['A', 'B', 'D'], ['A', 'B', 'C', 'E']], 'Basic decompose');
 
   fds = [];
 
-  assert.deepEqual(bernstein.generateBernsteinAlgoResults(attrs, fds), [['A', 'B', 'C', 'D', 'E']], 'Test add back lost attrs');
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+    [['A', 'B', 'C', 'D', 'E']], 'Test add back lost attrs');
 
   attrs = ['A', 'B', 'C', 'D', 'E', 'F'];
   fds = [{
@@ -54,6 +67,6 @@ QUnit.test('basic test bernsteins', function (assert) {
     type: 'fd'
   }];
 
-  assert.deepEqual(bernstein.generateBernsteinAlgoResults(attrs, fds),
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
     [['C', 'D', 'E', 'F'], ['A', 'E', 'B'], ['B', 'F', 'C'], ['C', 'A']], 'Test transitive dependency elimination');
 });
