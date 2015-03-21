@@ -26,7 +26,6 @@ var bernstein = (function () {
         var closureBeforeSub = utility.getClosureForAttr(fd.left, fdSet);
         _.forEach(subsets, function (sub) {
           var updatedLeft = fd.left;
-          fd.left = sub;
           var cloureAfterSub = utility.getClosureForAttr(sub, fdSet);
           if (utility.isSubset(cloureAfterSub, closureBeforeSub)
               && utility.isProperSubset(updatedLeft, sub)) {
@@ -64,6 +63,7 @@ var bernstein = (function () {
         });
       });
       removeEmptyFds();
+      fdSet = splitRightHandSide(fdSet);
     }
 
     function partition() {
@@ -78,14 +78,27 @@ var bernstein = (function () {
 
     function mergeEquivalentKeys() {
       function isTwoKeysEquivalent(key1, key2) {
-        return utility.isSetsEqual(utility.getClosureForAttr(key1, attrSet, fdSet),
-          utility.getClosureForAttr(key2, attrSet, fdSet));
+        var key1Attr = key1.split(',');
+        var key2Attr = key2.split(',');
+        return utility.isSetsEqual(utility.getClosureForAttr(key1Attr, fdSet),
+          utility.getClosureForAttr(key2Attr, fdSet));
+      }
+      function getFdsFromEquivalentKey(key1, key2) {
+        var key1Attr = key1.split(',');
+        var key2Attr = key2.split(',');
+        var simpleFds = [{left: key1Attr, right: key2Attr, type: 'fd'}];
+        splitRightHandSide(simpleFds);
+        return simpleFds;
       }
       var keys = _.keys(grouped);
       function iteratee(key) {
         function innerIteratee(anotherKey) {
-          if (key !== anotherKey && isTwoKeysEquivalent(key, anotherKey)) {
+          if (key !== anotherKey && !_.isUndefined(grouped[key])
+              && !_.isUndefined(grouped[anotherKey]) && isTwoKeysEquivalent(key, anotherKey)) {
+            var fdsFromEquivKeys = getFdsFromEquivalentKey(key, anotherKey);
             grouped[key] = utility.getUnion(grouped[key], grouped[anotherKey]);
+            grouped[key] = utility.getUnion(grouped[key], fdsFromEquivKeys);
+            fdSet = utility.getUnion(fdSet, fdsFromEquivKeys);
             grouped[anotherKey] = undefined;
           }
         }
@@ -95,32 +108,32 @@ var bernstein = (function () {
     }
 
     function eliminateTransitiveDependencies() {
-      // TODO: to be tested
-      // A -> B, B -> C, A -> C
-      var fdsToBeRemoved = [];
-      _.forEach(fdSet, function (fd) {
-        _.forEach(fdSet, function (fd1) {
-          var fdToCheck;
-          if (utility.isSetsEqual(fd.left, fd1.left)
-              && !utility.isSetsEqual(fd.right, fd1.right)) {
-            fdToCheck = {left: fd.left, right: fd1.right, type: 'fd'};
-            if (utility.contains(fdSet, fdToCheck)
-                && !utility.contains(fdsToBeRemoved, fd1)) {
-              fdsToBeRemoved.push(fdToCheck);
-            }
-          }
-        });
-      });
-      _.forEach(fdsToBeRemoved, function (fdToRemove) {
-        grouped[fdToRemove.left.join(',')] = utility.getDifference(
-          grouped[fdToRemove.left.join(',')], [fdToRemove]);
-      });
+      var fd;
+      var closureBefore;
+      var fdSetAfterSub;
+      var cloureAfter;
+      for (var i = 0; i < fdSet.length;) {
+        fd = fdSet[i];
+        closureBefore = utility.getClosureForAttr(fd.left, fdSet);
+        fdSetAfterSub = utility.getDifference(fdSet, [fd]);
+        cloureAfter = utility.getClosureForAttr(fd.left, fdSetAfterSub);
+        if (utility.isSetsEqual(closureBefore, cloureAfter)) {
+          fdSet.splice(i, 1);
+          grouped[fd.left.join(',')] = utility.getDifference(grouped[fd.left.join(',')], [fd]);
+        } else {
+          i++;
+        }
+      }
     }
 
     function generateTables() {
       function getTableFromFds(fds) {
+        if (!fds.length) {
+          return [];
+        }
         var table = fds[0].left;
         _.forEach(fds, function (fd) {
+          table = utility.getUnion(table, fd.left);
           table = utility.getUnion(table, fd.right);
         });
         return table;
@@ -128,7 +141,9 @@ var bernstein = (function () {
       _.forOwn(grouped, function (value, key) {
         if (!_.isUndefined(value)) {
           var table = getTableFromFds(value);
-          tables.push(table);
+          if (table.length) {
+            tables.push(table);
+          }
         }
       });
     }
@@ -161,6 +176,21 @@ var bernstein = (function () {
           i++;
         }
       }
+    }
+
+    function splitRightHandSide(fdParam) {
+      var fdsToAdd = [];
+      _.forEach(fdParam, function (fd) {
+        if (fd.right.length > 1) {
+          _.forEach(fd.right, function (item) {
+            var fdNew = {left: fd.left, right: [item], type: 'fd'};
+            fdsToAdd = utility.getUnion(fdsToAdd, [fdNew]);
+          });
+          fd.right = [fd.right[0]];
+        }
+      });
+      fdParam = utility.getUnion(fdParam, fdsToAdd);
+      return fdParam;
     }
 
     removeExtraneousAttrs();

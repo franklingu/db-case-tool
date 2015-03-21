@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" type="text/css" href="joint.css">
-  <title>ER diagram drawing</title>
-</head>
-<body>
-  <div id="paper" class="paper"></div>
-  <script type="text/javascript" src="joint.js"></script>
-  <script type="text/javascript" src="joint.shapes.erd.js"></script>
-  <script type="text/javascript" src="er.js"></script>
-</body>
-</html>
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/joint/joint.css')
+    script(src='/javascripts/jquery.js')
+    script(src='/javascripts/lodash.3.2.0.min.js')
+
+  body
+    h1= title
+    div#paper.paper
+    script(type='text/javascript' src='/joint/joint.js')
+    script(type='text/javascript' src='/joint/joint.shapes.erd.js')
+    script(type='text/javascript' src='/joint/er.js')

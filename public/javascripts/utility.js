@@ -15,8 +15,20 @@ var utility = (function () {
     if (!_.isObject(elem)) {
       return _.indexOf(set, elem) !== -1;
     }
+    if (_.isArray(elem)) {
+      _.forEach(set, function (item) {
+        if (utility.isSetsEqual(item, elem)) {
+          isContaining = true;
+        }
+      });
+      return isContaining;
+    }
+    elem.left.sort();
+    elem.right.sort();
     _.forEach(set, function (item) {
-      if (utility.isSetsEqual(item, elem)) {
+      item.left.sort();
+      item.right.sort();
+      if (JSON.stringify(item) === JSON.stringify(elem)) {
         isContaining = true;
       }
     });
