@@ -5,6 +5,7 @@
 
 
 var _variables = [];
+var _fds = [];
 
 // ------------------------------------
 // Check the input variable, when detect ',', create a new variable node
@@ -103,20 +104,25 @@ function addRelation () {
         return;
     }
 
+    // Display relation in the relation_box
+    var fd = {left:[] , right:[], type:'fd'};
     var relation = '{';
     while(lhs.firstChild) {
+        fd.left.push(lhs.firstChild.innerHTML);
         relation += lhs.firstChild.innerHTML + ',';
         lhs.removeChild(lhs.firstChild);
     }
     relation = relation.substring(0, relation.length-1);
     relation += '->';
     while(rhs.firstChild) {
+        fd.right.push(rhs.firstChild.innerHTML);
         relation += rhs.firstChild.innerHTML + ',';
         rhs.removeChild(rhs.firstChild);
     }
     relation = relation.substring(0, relation.length-1);
 
     output.value += relation + '}; ';
+    _fds.push(fd);
 }
 
 
@@ -317,3 +323,26 @@ function createTable () {
     closePopup();
 }
 
+
+function process () {
+    // attibutes and fds are stored in the global variables
+    alert("Number of variables: " + _variables.length);
+    alert("Number of fds: " + _fds.length);
+
+    // Check each fd
+    var output = "FDs: ";
+    for(var i=0; i<_fds.length; i++){
+        output += i + ",  left: ";
+        for(var j=0; j<_fds[i].left.length; j++) {
+            output += _fds[i].left[j] + ",";
+        }
+        output += "  ->  ";
+        for(var k=0; k<_fds[i].right.length; k++) {
+            output += _fds[i].right[k] + ",";
+        }
+        alert(output);
+        output = "FDs: ";
+    }
+
+    // Call back-end functions
+}
