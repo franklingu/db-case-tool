@@ -197,16 +197,44 @@ function choseRelationOption (temp) {
     //test.value = "good";
     //test.style.fontSize = '10px';
 
-    if(temp.style.backgroundColor == '')
-        temp.style.backgroundColor = 'rgb(255, 255, 255)';
+    // if(temp.style.backgroundColor == '')
+    //     temp.style.backgroundColor = 'rgb(255, 255, 255)';
 
-    if(temp.style.backgroundColor == 'rgb(255, 255, 255)') {
+    // if(temp.style.backgroundColor == 'rgb(255, 255, 255)') {
+    //     temp.style.backgroundColor = '#1b9254';
+    //     temp.setAttribute('chosen', 1);
+    // } else {
+    //     temp.style.backgroundColor = '#ffffff';
+    //     temp.setAttribute('chosen', 0);
+    // }
+
+    if(temp.id == 'Decomposition'){
         temp.style.backgroundColor = '#1b9254';
         temp.setAttribute('chosen', 1);
-    } else {
-        temp.style.backgroundColor = '#ffffff';
-        temp.setAttribute('chosen', 0);
-    }       
+        document.getElementById("Berstein").style.backgroundColor = 'rgb(255, 255, 255)';
+        document.getElementById("Berstein").setAttribute('chosen', 0);
+        document.getElementById("LTK").style.backgroundColor = 'rgb(255, 255, 255)';
+        document.getElementById("LTK").setAttribute('chosen', 0);
+
+    }
+    else if(temp.id == 'Berstein'){
+        temp.style.backgroundColor = '#1b9254';
+        temp.setAttribute('chosen', 1);
+        document.getElementById("Decomposition").style.backgroundColor = 'rgb(255, 255, 255)';
+        document.getElementById("Decomposition").setAttribute('chosen', 0);
+        document.getElementById("LTK").style.backgroundColor = 'rgb(255, 255, 255)';
+        document.getElementById("LTK").setAttribute('chosen', 0);
+
+    }
+    else{
+        temp.style.backgroundColor = '#1b9254';
+        temp.setAttribute('chosen', 1);
+        document.getElementById("Decomposition").style.backgroundColor = 'rgb(255, 255, 255)';
+        document.getElementById("Decomposition").setAttribute('chosen', 0);
+        document.getElementById("Berstein").style.backgroundColor = 'rgb(255, 255, 255)';
+        document.getElementById("Berstein").setAttribute('chosen', 0);
+    }
+
 }
 
 
