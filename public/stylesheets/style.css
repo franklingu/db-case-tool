@@ -192,7 +192,7 @@ h2 {
 }
 
 
-#relation_output {
+.box_output {
   width: 785px;
   height: 100px;
   resize: none;
@@ -249,4 +249,37 @@ h2 {
   border:2px solid #1b9254;
   border-radius: 6px;
   font-weight: bold;
+}
+
+.table {
+  width: 60%;
+  max-width: 100%;
+  border-top: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  margin-top: 10px;
+  margin-bottom:  10px;
+  display: table;
+  border-collapse: separate;
+}
+
+.table_head {
+  text-align: middle;
+  width: 60%;
+  max-width: 100%;
+  border-bottom: 1px solid #dddddd;
+}
+
+.tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.th {
+  width: 20%;
+  background: rgb(155,155,155);;
+  display: table-cell;
+  vertical-align: inherit;
 }

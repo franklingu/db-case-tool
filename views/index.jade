@@ -6,8 +6,11 @@ block content
   h1= title
   br
 
+
+  // ----------------------------------------- -----------------------------------------
+  // First Step: add varialbe
+  // ----------------------------------------- -----------------------------------------
   div
-    // Frist step.
     h2 Step 1: Enter your attributes one by one, separate them using comma.
 
     div(id='step1')
@@ -15,12 +18,17 @@ block content
         input(id='var_inputbox1', type="text", class='var_inputbox', autofocus='autofocus') 
         
     button(id='clear_variables', class='button', onclick='clearVariables()', style='left:600px') Clear 
+    br
+    textarea(id='variable_output', class='box_output', disabled)
   br
   br
   br
 
+
+  // ----------------------------------------- -----------------------------------------
+  // Second Step: add functional dependency
+  // ----------------------------------------- -----------------------------------------
   div
-    // Second step.
     h2 Step 2: Drag and drop your attributes down into the dependency relationships.
     
     div(id='step2')
@@ -33,13 +41,17 @@ block content
     button(id='confirm_relation', class='button', onclick='addRelation()', style='left:420px') Confirm
     button(id='clear_relation', class='button', onclick='clearRelations()', style='left:420px') Clear  
     br
-    textarea(id='relation_output', disabled)
+    textarea(id='relation_output', class='box_output', disabled)
     br
     button(id='clear_relation_output', class='button', onclick='clearRelationOutputs()', style='left:600px') Clear
   br
   br
   br
 
+
+  // ----------------------------------------- -----------------------------------------
+  // Instructions for Third Step
+  // ----------------------------------------- -----------------------------------------
   div(id='feature selection')
     div
       h2(style='float:left') Chose one of the two features for step 3.
@@ -52,6 +64,10 @@ block content
   h2(style='margin-left:30px') - Feature 2: {attribute, functional dependency, table} -> {relation form}
   br
 
+
+  // ----------------------------------------- -----------------------------------------
+  // Third Step: choose one from the two features
+  // ----------------------------------------- -----------------------------------------
   div(id='feature1', style='display:block')
     // Third step.
     h2 Step 3: Select relation forms.
@@ -63,35 +79,43 @@ block content
   div(id='feature2', style='display:none')
     // Third step.
     h2 Step 3: Design your table.
-    button(id='add_table', class='button2', onclick='showPopup()') Add New Table
+    button(id='add_table', class='button2', onclick='showPopup();createVarSelect()') Add New Table
+    div(id='table_area')
 
   div(class="overlay-bg")
   div(class="overlay-content popup")
     form(name="input", action="action_page.php", method="get")
       | Table Name:
-      input(type="text", name="tableName")
+      input(id='new_table_name', type="text", name="tableName")
       br
       | Choose Attributes:
-      select(multiple class="form-control")
-        option="Matric Number"
-        option="Name"
-        option="Age"
+      select(multiple class="form-control", id='Var_Select')
+        // Options are set in 'pageManager.js'
       br
       br
-    input(class="button2", type="submit", value="Submit")
+    button(class="button2", onclick='createTable()') Submit
     button(class="button2", onclick='closePopup()') Close
 
   br
   br
   br
 
+
+  // ----------------------------------------- -----------------------------------------
+  // Fourth Step: call functions from back-end
+  // ----------------------------------------- -----------------------------------------
   div
     h2 Step 4: Process
+    h2= n
     button(id='process_button', class='button2', onClick='') Process
   br
   br
   br
 
+
+  // ----------------------------------------- -----------------------------------------
+  // Fifth Step: display results
+  // ----------------------------------------- -----------------------------------------
   div
     h2 Step 5: Results
   br

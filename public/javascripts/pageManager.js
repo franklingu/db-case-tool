@@ -2,20 +2,20 @@
 // Name: Zhou Bin
 // Date: 10 Mar, 2015
 // ------------------------------------
-// $(document).ready(function(){
 
+
+var _variables = [];
 
 // ------------------------------------
 // Check the input variable, when detect ',', create a new variable node
 // ------------------------------------
 document.onkeydown=checkKey;
-
 function checkKey(e) {
     var event = window.event ? window.event : e;
     //alert("here");
     if (true) {
         //alert(event.keyCode)
-        if(event.keyCode == 188) { 
+        if(event.keyCode == 188) {  // 188 is the code for ','
 
             // check which one is in use
             var input = document.getElementById(e.target.id); // it does not include ','
@@ -26,6 +26,11 @@ function checkKey(e) {
             var origin_id = input.id;
             //var origin_length = input.maxlength;
             //var origin_size = input.size;
+            _variables.push(input.value);
+
+            // Add the variable to the Var_box
+            var var_box = document.getElementById('variable_output');
+            var_box.value += input.value + ",";
 
             // Create a div
             var newDiv = document.createElement('div');
@@ -98,18 +103,20 @@ function addRelation () {
         return;
     }
 
-    var relation = '';
+    var relation = '{';
     while(lhs.firstChild) {
-        relation += lhs.firstChild.innerHTML;
+        relation += lhs.firstChild.innerHTML + ',';
         lhs.removeChild(lhs.firstChild);
     }
+    relation = relation.substring(0, relation.length-1);
     relation += '->';
     while(rhs.firstChild) {
-        relation += rhs.firstChild.innerHTML;
+        relation += rhs.firstChild.innerHTML + ',';
         rhs.removeChild(rhs.firstChild);
     }
+    relation = relation.substring(0, relation.length-1);
 
-    output.value += relation + ', ';
+    output.value += relation + '}; ';
 }
 
 
@@ -117,6 +124,7 @@ function addRelation () {
 // Clear all the variables in the 1st step 
 // ------------------------------------
 function clearVariables () {
+    // Clear var_nodes
     var output = document.getElementById('step1_sub');
     var count=1;
 
@@ -130,7 +138,13 @@ function clearVariables () {
             break;
         }
     }
-    //alert("finish");
+
+    // Clear var_box
+    var var_box = document.getElementById('variable_output');
+    var_box.value = null;
+
+    // Clear the global variable
+    _variables = [];
 }
 // ------------------------------------
 // Clear all the relations in the 2nd step(lhs, rhs)
@@ -154,9 +168,12 @@ function clearRelationOutputs () {
 }
 
 
+// ------------------------------------
+// For step 3, there are two features provided.
+// This function is to toggle the features.
+// ------------------------------------
 function updateFeatures (index) {
     //alert(index);
-
     var div_nf = document.getElementById('feature1');
     var div_t = document.getElementById('feature2');
 
@@ -192,4 +209,83 @@ function choseRelationOption (temp) {
     }       
 }
 
+
+// ------------------------------------
+// Create a select for variables in pop-up window
+// ------------------------------------
+function createVarSelect() {
+    //alert("In createVarSelect function");
+    var select = document.getElementById('Var_Select');
+    while(select.firstChild)
+        select.removeChild(select.firstChild);
+
+    if(_variables.length == 0) {
+        return;
+    }
+    
+    //alert("Variable number: " + _variables.length);
+    //alert("Select number: " + select.length);
+    var _var_size = _variables.length;
+    var select_size = select.length;
+    for(var i=0; i<_var_size; i++) {
+        //alert("i: " + i);
+        var option = document.createElement('option');
+        option.text = _variables[i];
+        select.appendChild(option);
+    }
+}
+
+
+// ------------------------------------
+// Create a table based on the variables chosen
+// ------------------------------------
+function createTable () {
+    var result = [];
+    var options = document.getElementById('Var_Select');
+    var opt;
+
+    //alert("lala: " + options.length);
+    for(var i=0; i<options.length; i++) {
+        opt = options[i];
+        if(opt.selected) {
+            result.push(opt.value);
+            //alert(opt.value);
+        }
+    }
+
+
+    // Create table in step 3
+    var table_area = document.getElementById('table_area');
+    var new_table = document.createElement('table');
+    var new_table_name = document.getElementById('new_table_name').value;
+    new_table.setAttribute('style', 'margin-left:80px;');
+    new_table.setAttribute('class', 'table');
+
+    // Table head
+    if(new_table_name == null || new_table_name == '') new_table_name = 'Table';
+
+    // Table body
+    var table_content = document.createElement('tbody');
+    var tr2 = document.createElement('tr');
+    var th2 = document.createElement('th');
+    th2.setAttribute('class', 'th');
+    th2.appendChild(document.createTextNode(new_table_name+": "));
+    tr2.appendChild(th2);
+    for(var i=0; i<options.length; i++) {
+        var th2 = document.createElement('th');
+        if(i>=result.length) {
+            th2.appendChild(document.createTextNode(" "));
+            tr2.appendChild(th2);
+        } else {
+            th2.appendChild(document.createTextNode(result[i]));
+            tr2.appendChild(th2);
+        }
+    }
+    table_content.appendChild(tr2);
+    new_table.appendChild(table_content);
+
+    table_area.appendChild(new_table);
+
+    closePopup();
+}
 
