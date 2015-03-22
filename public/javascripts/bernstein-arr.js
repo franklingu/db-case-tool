@@ -6,11 +6,12 @@ if (!window.utility) {
 
 var bernstein = (function () {
   var bernstein = {};
-  bernstein.generateBernsteinAlgoResults = function (attrs, fds) {
+  bernstein.generateBernsteinAlgoResults = function (attrs, fds, isSelfImproved) {
     var attrSet = utility.removeDuplicates(attrs);
     var fdSet = utility.removeDuplicates(fds);
     var grouped = {};
     var tables = [];
+    var output = {};
 
     function removeExtraneousAttrs() {
       // substitute a FD LHS with a proper subset of it,
@@ -36,6 +37,7 @@ var bernstein = (function () {
         });
       });
       removeEmptyFds();
+      output.steps = [utility.getUnion(fdSet, [])];
     }
 
     function findCovering() {
@@ -64,6 +66,7 @@ var bernstein = (function () {
       });
       removeEmptyFds();
       fdSet = splitRightHandSide(fdSet);
+      output.steps.push(utility.getUnion(fdSet, []));
     }
 
     function partition() {
@@ -74,6 +77,7 @@ var bernstein = (function () {
           grouped[fd.left.join(',')].push(fd);
         }
       });
+      output.steps.push(_.cloneDeep(grouped));
     }
 
     function mergeEquivalentKeys() {
@@ -105,6 +109,7 @@ var bernstein = (function () {
         _.forEach(keys, innerIteratee);
       }
       _.forEach(keys, iteratee);
+      output.steps.push(_.cloneDeep(grouped));
     }
 
     function eliminateTransitiveDependencies() {
@@ -124,6 +129,7 @@ var bernstein = (function () {
           i++;
         }
       }
+      output.steps.push(_.cloneDeep(grouped));
     }
 
     function generateTables() {
@@ -146,6 +152,7 @@ var bernstein = (function () {
           }
         }
       });
+      output.steps.push(_.cloneDeep(tables));
     }
 
     function addBackLostAttrs() {
@@ -166,6 +173,7 @@ var bernstein = (function () {
         });
         tables.push(utility.getUnion(lostAttrs, keyOfAnotherTable));
       }
+      output.steps.push(_.cloneDeep(tables));
     }
 
     function removeEmptyFds() {
@@ -199,9 +207,11 @@ var bernstein = (function () {
     mergeEquivalentKeys();
     eliminateTransitiveDependencies();
     generateTables();
-    addBackLostAttrs();
-    console.log('generated tables: ',tables);
-    return tables;
+    if (isSelfImproved) {
+      addBackLostAttrs();
+    }
+    output.tables = tables;
+    return output;
   };
   return bernstein;
 }());

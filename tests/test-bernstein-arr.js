@@ -24,7 +24,7 @@ QUnit.test('basic test bernsteins', function (assert) {
     right: ['E', 'C'],
     type: 'fd'
   }];
-  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds).tables,
     [['A', 'B', 'D', 'C', 'E']], 'No change to the table');
 
   fds = [{
@@ -36,13 +36,16 @@ QUnit.test('basic test bernsteins', function (assert) {
     right: ['E'],
     type: 'fd'
   }];
-  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds).tables,
     [['A', 'B', 'D'], ['A', 'B', 'C', 'E']], 'Basic decompose');
 
   fds = [];
 
-  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds, true).tables,
     [['A', 'B', 'C', 'D', 'E']], 'Test add back lost attrs');
+
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds, false).tables,
+    [], 'Test no adding back lost attrs for original algo');
 
   attrs = ['A', 'B', 'C', 'D', 'E', 'F'];
   fds = [{
@@ -67,6 +70,6 @@ QUnit.test('basic test bernsteins', function (assert) {
     type: 'fd'
   }];
 
-  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds),
+  assertIsTwoTableResultsEqual(assert, bernstein.generateBernsteinAlgoResults(attrs, fds).tables,
     [['C', 'D', 'E', 'F'], ['A', 'E', 'B'], ['B', 'F', 'C'], ['C', 'A']], 'Test transitive dependency elimination');
 });
