@@ -1,0 +1,123 @@
+extends layout
+
+block content
+
+  img(src='/images/icon.png', style='float:left;')
+  h1= title
+  br
+
+
+  // ----------------------------------------- -----------------------------------------
+  // First Step: add varialbe
+  // ----------------------------------------- -----------------------------------------
+  div
+    h2 Step 1: Enter your attributes one by one, separate them using comma.
+
+    div(id='step1')
+      div(id='step1_sub')
+        input(id='var_inputbox1', type="text", class='var_inputbox', autofocus='autofocus') 
+        
+    button(id='clear_variables', class='button', onclick='clearVariables()', style='left:600px') Clear 
+    br
+    textarea(id='variable_output', class='box_output', disabled)
+  br
+  br
+  br
+
+
+  // ----------------------------------------- -----------------------------------------
+  // Second Step: add functional dependency
+  // ----------------------------------------- -----------------------------------------
+  div
+    h2 Step 2: Drag and drop your attributes down into the dependency relationships.
+    
+    div(id='step2')
+
+      div(id='step2_lhs', ondrop="drop(event)" ondragover="allowDrop(event)")
+      div(id='step2_arrow')
+        img(src='/images/arrow.png', width='100', height='90')
+      div(id='step2_rhs', ondrop="drop(event)" ondragover="allowDrop(event)")
+      
+    button(id='confirm_relation', class='button', onclick='addRelation()', style='left:420px') Confirm
+    button(id='clear_relation', class='button', onclick='clearRelations()', style='left:420px') Clear  
+    br
+    textarea(id='relation_output', class='box_output', disabled)
+    br
+    button(id='clear_relation_output', class='button', onclick='clearRelationOutputs()', style='left:600px') Clear
+  br
+  br
+  br
+
+
+  // ----------------------------------------- -----------------------------------------
+  // Instructions for Third Step
+  // ----------------------------------------- -----------------------------------------
+  div(id='feature selection')
+    div
+      h2(style='float:left') Chose one of the two features for step 3.
+      select(id='select_option', onchange="if (this.selectedIndex+1) updateFeatures(this.selectedIndex);")
+        option(value='Feature 1') Feature 1
+        option(value='Feature 2') Feature 2
+    br
+  br
+  h2(style='margin-left:30px') - Feature 1: {attribute, functional dependency, relation form} -> {table}
+  h2(style='margin-left:30px') - Feature 2: {attribute, functional dependency, table} -> {relation form}
+  br
+
+
+  // ----------------------------------------- -----------------------------------------
+  // Third Step: choose one from the two features
+  // ----------------------------------------- -----------------------------------------
+  div(id='feature1', style='display:block')
+    // Third step.
+    h2 Step 3: Select relation forms.
+    button(id='Decomposition' class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') BCNFDecomposition
+    button(id='Berstein' class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') Berstein
+    button(id='LTK' class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') LTK
+
+  div(id='feature2', style='display:none')
+    // Third step.
+    h2 Step 3: Design your table.
+    button(id='add_table', class='button2', onclick='showPopup();createVarSelect()') Add New Table
+    div(id='table_area')
+
+  div(class="overlay-bg")
+  div(class="overlay-content popup")
+    form(name="input", action="action_page.php", method="get")
+      | Table Name:
+      input(id='new_table_name', type="text", name="tableName")
+      br
+      | Choose Attributes:
+      select(multiple class="form-control", id='Var_Select')
+        // Options are set in 'pageManager.js'
+      br
+      br
+    button(class="button2", onclick='createTable()') Submit
+    button(class="button2", onclick='closePopup()') Close
+
+  br
+  br
+  br
+
+
+  // ----------------------------------------- -----------------------------------------
+  // Fourth Step: call functions from back-end
+  // ----------------------------------------- -----------------------------------------
+  div
+    h2 Step 4: Process
+    button(id='process_button', class='button2', onClick='') Process
+  br
+  br
+  br
+
+
+  // ----------------------------------------- -----------------------------------------
+  // Fifth Step: display results
+  // ----------------------------------------- -----------------------------------------
+  div
+    h2 Step 5: Results
+  br
+  br
+  
+  script(type='text/javascript' src='javascript/utility.js')
+  script(type='text/javascript' src='javascript/dbtester.js')
