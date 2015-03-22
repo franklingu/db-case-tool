@@ -55,10 +55,9 @@ block content
   div(id='feature1', style='display:block')
     // Third step.
     h2 Step 3: Select relation forms.
-    button(class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') 1NF
-    button(class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') 2NF
-    button(class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') 3NF
-    button(class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') BCNF
+    button(id='Decomposition' class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') BCNFDecomposition
+    button(id='Berstein' class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') Berstein
+    button(id='LTK' class='relation_option_button', onclick='choseRelationOption(this)', chosen='0') LTK
 
   div(id='feature2', style='display:none')
     // Third step.
@@ -87,15 +86,16 @@ block content
 
   div
     h2 Step 4: Process
-    button(id='process_button', class='button2', onClick='') Process
+    button(id='process_button', class='button2', onClick='process()') Process
   br
   br
   br
 
   div
     h2 Step 5: Results
+    textarea(id='result_output', disabled)
+
   br
   br
   
-  script(type='text/javascript' src='javascript/utility.js')
-  script(type='text/javascript' src='javascript/dbtester.js')
+
