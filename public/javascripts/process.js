@@ -46,7 +46,7 @@ function processData(table){
 		   var leftbreakIndex = tempFD.indexOf("-");
 		   var rightStartIndex = leftbreakIndex + 2;
 
-		   var left = tempFD.substring(0, leftbreakIndex);
+		   var left = tempFD.substring(1, leftbreakIndex);
 		   var right = tempFD.substring(rightStartIndex);
 		   console.log(left);
 		   console.log(right);
