@@ -7,8 +7,8 @@ if (!window.utility) {
 var bernstein = (function () {
   var bernstein = {};
   bernstein.generateBernsteinAlgoResults = function (attrs, fds, isSelfImproved) {
-    var attrSet = utility.removeDuplicates(attrs);
-    var fdSet = utility.removeDuplicates(fds);
+    var attrSet = utility.removeDuplicates(_.cloneDeep(attrs));
+    var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var grouped = {};
     var tables = [];
     var output = {};

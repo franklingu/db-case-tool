@@ -25,8 +25,8 @@ var dbtester = (function () {
   // return whether a relation is 2NF
   // @attrs: []; @fds: [{left: '', right; '', type:''}]
   dbtester.is2NF = function (attrs, fds) {
-    var attrSet = utility.removeDuplicates(attrs);
-    var fdSet = utility.removeDuplicates(fds);
+    var attrSet = utility.removeDuplicates(_.cloneDeep(attrs));
+    var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var keys = utility.getAllKeys(attrSet, fdSet);
     var primeAttrs = getAllPrimeAttributes(keys);
     var isIn2NF = true;
@@ -52,8 +52,8 @@ var dbtester = (function () {
   // return whether a relation is 3NF
   // @attrs: []; @fds: [{left: '', right; '', type:''}]
   dbtester.is3NF = function (attrs, fds) {
-    var attrSet = utility.removeDuplicates(attrs);
-    var fdSet = utility.removeDuplicates(fds);
+    var attrSet = utility.removeDuplicates(_.cloneDeep(attrs));
+    var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var keys = utility.getAllKeys(attrSet, fdSet);
     var primeAttrs = getAllPrimeAttributes(keys);
     var isIn3NF = true;
@@ -70,8 +70,8 @@ var dbtester = (function () {
   // return whether a relation is BCNF
   // @attrs: []; @fds: [{left: '', right; '', type:''}]
   dbtester.isBCNF = function (attrs, fds) {
-    var attrSet = utility.removeDuplicates(attrs);
-    var fdSet = utility.removeDuplicates(fds);
+    var attrSet = utility.removeDuplicates(_.cloneDeep(attrs));
+    var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var isInBCNF = true;
     _.forEach(fdSet, function (item) {
       if (!(utility.isSubset(item.left, item.right)

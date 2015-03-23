@@ -294,3 +294,11 @@ h2 {
   display: table-cell;
   vertical-align: inherit;
 }
+
+.relation-option-selected {
+  background-color: #1b9254;
+}
+
+.relation-option-unselected {
+  background-color: rgb(255, 255, 255);
+}
