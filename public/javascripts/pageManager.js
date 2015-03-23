@@ -64,24 +64,38 @@ $(document).ready(function () {
   });
 
   $('#process_button').click(function () {
+    function displayBernsteinAlgoResults(result) {
+      var outputForResult = '';
+      outputForResult += 'Generated tables: ';
+      for (var i = result.tables.length - 1; i >= 0; i--) {
+        outputForResult += JSON.stringify(result.tables[i]) + '<br>';
+      }
+      outputForResult += '<br><br>';
+      for (i = 0; i <= result.steps.length; i++) {
+        if (result.steps[i]) {
+          outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
+        }
+      }
+      $('#output-algo').html(outputForResult);
+    }
+
     var selectedFeature = $('#select_option').val();
+    var bernsteinAlgoResult;
     if (selectedFeature === 'Feature 1') {
       if (!$('.relation_option_button.relation-option-selected').length) {
         return alert('Please choose an option in step 3');
       }
       var chosenOptId = $('.relation_option_button.relation-option-selected').attr('id');
       if (chosenOptId === 'Berstein') {
-        console.log('generated results', bernstein.generateBernsteinAlgoResults(_variables, _fds, false));
+        bernsteinAlgoResult = bernstein.generateBernsteinAlgoResults(_variables, _fds, false);
+        displayBernsteinAlgoResults(bernsteinAlgoResult);
       } else if (chosenOptId === 'BersteinSelf') {
-        console.log('generated results', bernstein.generateBernsteinAlgoResults(_variables, _fds, true));
-      }
-      else if (chosenOptId === 'Decomposition'){
+        bernsteinAlgoResult = bernstein.generateBernsteinAlgoResults(_variables, _fds, true);
+        displayBernsteinAlgoResults(bernsteinAlgoResult);
+      } else if (chosenOptId === 'Decomposition'){
         getBCNFDecomposition();
-
-      }
-      else if (chosenOptId === 'LTK'){
+      } else if (chosenOptId === 'LTK'){
         getLTK();
-
       }
     } else if (selectedFeature === 'Feature 2') {
       var is2NF = true, is3NF = true, isBCNF = true;
@@ -136,34 +150,34 @@ function drop(ev) {
 // Add a new relation ship in the 'relation_output' textarea
 // ------------------------------------
 function addRelation () {
-    var lhs = document.getElementById('step2_lhs');
-    var rhs = document.getElementById('step2_rhs');
-    var output = document.getElementById('relation_output');
+  var lhs = document.getElementById('step2_lhs');
+  var rhs = document.getElementById('step2_rhs');
+  var output = document.getElementById('relation_output');
 
-    if(lhs.childNodes.length==0 || rhs.childNodes.length==0) {
-        alert('Cannot be empty.');
-        return;
-    }
+  if(lhs.childNodes.length==0 || rhs.childNodes.length==0) {
+    alert('Function dependency left hand side or right hand side cannot be empty.');
+    return;
+  }
 
-    // Display relation in the relation_box
-    var fd = {left:[] , right:[], type:'fd'};
-    var relation = '{';
-    while(lhs.firstChild) {
-        fd.left.push(lhs.firstChild.innerHTML);
-        relation += lhs.firstChild.innerHTML + ',';
-        lhs.removeChild(lhs.firstChild);
-    }
-    relation = relation.substring(0, relation.length-1);
-    relation += '->';
-    while(rhs.firstChild) {
-        fd.right.push(rhs.firstChild.innerHTML);
-        relation += rhs.firstChild.innerHTML + ',';
-        rhs.removeChild(rhs.firstChild);
-    }
-    relation = relation.substring(0, relation.length-1);
+  // Display relation in the relation_box
+  var fd = {left:[] , right:[], type:'fd'};
+  var relation = '{';
+  while(lhs.firstChild) {
+    fd.left.push(lhs.firstChild.innerHTML);
+    relation += lhs.firstChild.innerHTML + ',';
+    lhs.removeChild(lhs.firstChild);
+  }
+  relation = relation.substring(0, relation.length-1);
+  relation += '->';
+  while(rhs.firstChild) {
+    fd.right.push(rhs.firstChild.innerHTML);
+    relation += rhs.firstChild.innerHTML + ',';
+    rhs.removeChild(rhs.firstChild);
+  }
+  relation = relation.substring(0, relation.length-1);
 
-    output.value += relation + '}; ';
-    _fds.push(fd);
+  output.value += relation + '}; ';
+  _fds.push(fd);
 }
 
 
