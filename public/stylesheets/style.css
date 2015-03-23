@@ -94,7 +94,7 @@ h2 {
 
 #step1 {
   width: 790px;
-  height: 170px;
+  height: 100px;
   border: 1px solid black;
 }
 
@@ -194,7 +194,7 @@ h2 {
 
 .box_output {
   width: 785px;
-  height: 100px;
+  height: 60px;
   resize: none;
 }
 
@@ -202,7 +202,7 @@ h2 {
   font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
 
   width: 785px;
-  height: 100px;
+  height: 50px;
   resize: none;
 }
 
@@ -222,14 +222,13 @@ h2 {
 .relation_option_button {
   margin-left: 75px;
   width: 170px;
-  height: 40px;
+  height: 50px;
   font-family: arial;
   font-size: 15px;
   background: #ffffff;
   border:2px solid #1b9254;
   border-radius: 6px;
   font-weight: bold;
-  overflow: auto;
 
 }
 

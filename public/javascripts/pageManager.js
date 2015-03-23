@@ -75,6 +75,14 @@ $(document).ready(function () {
       } else if (chosenOptId === 'BersteinSelf') {
         console.log('generated results', bernstein.generateBernsteinAlgoResults(_variables, _fds, true));
       }
+      else if (chosenOptId === 'Decomposition'){
+        getBCNFDecomposition();
+
+      }
+      else if (chosenOptId === 'LTK'){
+        getLTK();
+
+      }
     } else if (selectedFeature === 'Feature 2') {
       var is2NF = true, is3NF = true, isBCNF = true;
       $('#table_area').find('table').each(function () {
