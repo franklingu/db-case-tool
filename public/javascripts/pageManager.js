@@ -63,7 +63,7 @@ $(document).ready(function () {
     $('#table_area').html('');
   });
 
-  $('#process_button').click(function () {
+  $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
       //outputForResult += 'Generated tables: ';
@@ -81,11 +81,11 @@ $(document).ready(function () {
       makeTable(outputForResult);
     }
 
-    var selectedFeature = $('#select_option').val();
+    var selectedFeature = $('#tabs>li>a.selected').html();
     var bernsteinAlgoResult;
     if (selectedFeature === 'Feature 1') {
       if (!$('.relation_option_button.relation-option-selected').length) {
-        return alert('Please choose an option in step 3');
+        return window.alert('Please choose an option in step 3');
       }
       var chosenOptId = $('.relation_option_button.relation-option-selected').attr('id');
       if (chosenOptId === 'Berstein') {
@@ -123,9 +123,9 @@ $(document).ready(function () {
       outputForNFTests += ('The table is ' + (is2NF ? '' : 'not ') + 'in second normal form<br>');
       outputForNFTests += ('The table is ' + (is3NF ? '' : 'not ') + 'in third normal form<br>');
       outputForNFTests += ('The table is ' + (isBCNF ? '' : 'not ') + 'in Boyce Codd normal form<br>');
-      $('#output-algo').html(outputForNFTests);
+      $('#output-algo-2').html(outputForNFTests);
     } else {
-      alert('Please select a feature');
+      window.alert('Please select a feature');
     }
   });
 });
