@@ -2,7 +2,7 @@ extends layout
 
 block content
 
-  img(src='/images/icon.png', style='float:left;')
+  img(src='/images/icon.jpg', style='float:left; width: 100px; height: 100px;')
   h1= title
   br
 
@@ -61,47 +61,51 @@ block content
   div(class="tabContent", id="feature1")
     h2 Feature 1:
     p Input attributes and functional dependencies. We will generate tables for your based on your choice of method.
-
-  div(class="tabContent", id="feature2")
-    h2 Feature 2:
-    p Input attributes and functional dependencies. We will tell whether your database schema is in which normalization forms.
-
-  br
-
-  // ----------------------------------------- -----------------------------------------
-  // Instructions for Third Step
-  // ----------------------------------------- -----------------------------------------
-  div(id='feature-selection')
-    div
-      h2(style='float:left') Chose one of the two features for step 3.
-      select(id='select_option')
-        option(value='Feature 1') Feature 1
-        option(value='Feature 2') Feature 2
-    br
-    br
-    div
-      p(class='small') - Feature 1: {attribute, functional dependency, relation form} -> {table}
-      p(class='small') - Feature 2: {attribute, functional dependency, table} -> {relation form}
-  br
-
-
-  // ----------------------------------------- -----------------------------------------
-  // Third Step: choose one from the two features
-  // ----------------------------------------- -----------------------------------------
-  div(id='feature1', style='display:block')
-    // Third step.
+    // Select normalization method
     h2 Step 3: Select relation forms.
     button(id='Decomposition' class='relation_option_button', chosen='0') BCNFDecomposition
     button(id='Berstein' class='relation_option_button', chosen='0') Berstein
     button(id='BersteinSelf' class='relation_option_button', chosen='0') Berstein Self Improved
     button(id='LTK' class='relation_option_button', chosen='0') LTK
+    div
+      h2 Step 4: Process
+      button(class='process_button', class='button2') Process
+    br
+    br
+    br
 
-  div(id='feature2', style='display:none')
-    // Third step.
+    div
+      h2 Step 5: Results
+      div#output-algo-1
+      //textarea(id='result_output', class='result_output', disabled)
+      div#output-result-div
+
+    br
+    br
+
+  div(class="tabContent", id="feature2")
+    h2 Feature 2:
+    p Input attributes and functional dependencies. We will tell whether your database schema is in which normalization forms.
+    // Input new table
     h2 Step 3: Design your table.
     button(id='add_table', class='button2', onclick='showPopup();createVarSelect()') Add New Table
     button(id='clear_tables', class='button2', style='display: none;') Clear
     div(id='table_area')
+
+    div
+      h2 Step 4: Process
+      button(class='process_button', class='button2') Process
+    br
+    br
+    br
+
+    div
+      h2 Step 5: Results
+      div#output-algo-2
+      div#output-result-div-2
+
+    br
+    br
 
   div(class="overlay-bg")
   div(class="overlay-content popup")
@@ -118,29 +122,5 @@ block content
     button(class="button2", onclick='closePopup()') Close
 
   br
-  br
-  br
 
-
-  // ----------------------------------------- -----------------------------------------
-  // Fourth Step: call functions from back-end
-  // ----------------------------------------- -----------------------------------------
-  div
-    h2 Step 4: Process
-    button(id='process_button', class='button2') Process
-  br
-  br
-  br
-
-
-  // ----------------------------------------- -----------------------------------------
-  // Fifth Step: display results
-  // ----------------------------------------- -----------------------------------------
-  div
-    h2 Step 5: Results
-    div#output-algo
-    //textarea(id='result_output', class='result_output', disabled)
-    div#output-result-div
-
-  br
-  br
+  

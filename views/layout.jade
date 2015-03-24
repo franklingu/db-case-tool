@@ -3,6 +3,12 @@ html
   head
     title= title
     
+    link(rel="icon" href="/favicon.ico" type="image/x-icon")
+
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/css/plugins/morris.css')
+    //link(rel='stylesheet', href='/stylesheets/css/bootstrap.css')
+    
     script(src='//code.jquery.com/jquery-1.11.2.min.js')
     script(src='/javascripts/lodash.3.2.0.min.js')
     script(src='/javascripts/supportFunction.js')
@@ -16,10 +22,6 @@ html
     script(src='/javascripts/popup.js')
     //script(src='/javascripts/bootstrap.js')    
     
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/css/plugins/morris.css')
-    //link(rel='stylesheet', href='/stylesheets/css/bootstrap.css')
-
   body
     block content
 
