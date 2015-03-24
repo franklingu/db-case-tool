@@ -8,21 +8,21 @@ var fd_JSON = {"fd": [
     ]
 };
 
-function isSubsetOf(a,b){ return (a&b)==a; }
+function isSubsetOf(attr1,attr2){ return (attr1&attr2)==attr1; }
 
-function isProperSubsetOf(a,b){ return a!=b && isSubsetOf(a,b);}
+function isProperSubsetOf(attr1,attr2){ return attr1!=attr2 && isSubsetOf(attr1,attr2);}
 
-function setUnion(a,b){ return a|b; }
+function setUnion(attr1,attr2){ return attr1|attr2; }
 
-function setIntersect(a,b){ return a&b; }
+function setIntersect(attr1,attr2){ return attr1&attr2; }
 
-function setExclude(a,b){ return setIntersect(a,~b); }
+function setExclude(attr1,attr2){ return setIntersect(attr1,~attr2); }
 
-function max(a,b){
-	if(a > b)
-		return a;
+function max(attr1,attr2){
+	if(attr1 > attr2)
+		return attr1;
 	else
-		return b;
+		return attr2;
 }
 
 function addAttribute(table_name, attr_name)

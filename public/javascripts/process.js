@@ -19,8 +19,19 @@ function getBCNFDecomposition(){
 	table = "Decomposition";
 	processData(table);
 	result = BCNFDecomposition(getFDNumber(table),table);
+	if(result == "No"){
+		var display = $('#variable_output').val();
+		console.log(display);
+		var process = '{'+display.substring(0, display.length)+'}';
+		makeTable(process);
+
+	}
 	//$('#output-algo').html(result);
-	makeTable(result);
+	else{
+		makeTable(result);
+	}
+	
+
 
 	//document.getElementById('result_output').value = result;
 
