@@ -10,45 +10,67 @@ block content
   // ----------------------------------------- -----------------------------------------
   // First Step: add varialbe
   // ----------------------------------------- -----------------------------------------
-  div
+  div(id='attribute_area')
     h2 Step 1: Enter your attributes one by one, separate them using comma.
 
     div(id='step1')
       div(id='step1_sub')
         input(id='var_inputbox1', type="text", class='var_inputbox', autofocus='autofocus') 
-        
-    button(id='clear_variables', class='button', onclick='clearVariables()', style='left:600px') Clear 
+          
+    button(id='clear_variables', class='button', onclick='clearVariables()', style='left:65%') Clear 
     br
-    textarea(id='variable_output', class='box_output', disabled)
-  br
-  br
-  br
+    textarea(id='variable_output', class='box_output', disabled, style='display:none')
 
 
   // ----------------------------------------- -----------------------------------------
   // Second Step: add functional dependency
   // ----------------------------------------- -----------------------------------------
-  div
+  div(id='fd_area')
     h2 Step 2: Drag and drop your attributes down into the dependency relationships.
-    
+      
     div(id='step2')
 
       div(id='step2_lhs', ondrop="drop(event)" ondragover="allowDrop(event)")
       div(id='step2_arrow')
-        img(src='/images/arrow.png', width='100', height='90')
+        img(src='/images/arrow.png', width='80', height='70')
       div(id='step2_rhs', ondrop="drop(event)" ondragover="allowDrop(event)")
-      
-    button(id='confirm_relation', class='button', onclick='addRelation()', style='left:420px') Confirm
-    button(id='clear_relation', class='button', onclick='clearRelations()', style='left:420px') Clear  
+        
+    button(id='confirm_relation', class='button', onclick='addRelation()', style='left:35.5%') Confirm
+    button(id='clear_relation', class='button', onclick='clearRelations()', style='left:35.5%') Clear  
     br
+  br
+  br
+
+  div(id='confirmed_fd', style='display:none')
     textarea(id='relation_output', class='box_output', disabled)
+    br  
+    button(id='clear_relation_output', class='button', onclick='clearRelationOutputs()', style='width:15%;height:80px;margin-top:3%;margin-left:5px') Clear
     br
-    button(id='clear_relation_output', class='button', onclick='clearRelationOutputs()', style='left:600px') Clear
-  br
-  br
-  br
 
 
+  br
+  br
+  br
+  ul(id="tabs")
+    li(role="feature3")
+      a(href='#feature3') Feature 1
+
+    li(role="feature4") 
+      a(href='#feature4') Feature 2
+
+  div(class="tabContent", id="feature3")
+    h2 About JavaScript tabs
+    div
+      p JavaScript tabs partition your Web page content into tabbed sections. Only one section at a time is visible.
+      p The code is written in such a way that the page degrades gracefully in browsers that don't support JavaScript or CSS.
+
+  div(class="tabContent", id="feature4")
+    h2 About 
+    div
+      p JavaScript tabs partition your Web page content into tabbed sections. Only one section at a time is visible.
+      p The code is written in such a way that the page degrades gracefully in browsers that don't support JavaScript or CSS.
+
+  br
   // ----------------------------------------- -----------------------------------------
   // Instructions for Third Step
   // ----------------------------------------- -----------------------------------------
@@ -58,6 +80,7 @@ block content
       select(id='select_option')
         option(value='Feature 1') Feature 1
         option(value='Feature 2') Feature 2
+    br
     br
     div
       p(class='small') - Feature 1: {attribute, functional dependency, relation form} -> {table}

@@ -148,6 +148,7 @@ function drop(ev) {
 
 // ------------------------------------
 // Add a new relation ship in the 'relation_output' textarea
+// Display 'relation_output' textarea if it was empty
 // ------------------------------------
 function addRelation () {
   var lhs = document.getElementById('step2_lhs');
@@ -158,6 +159,10 @@ function addRelation () {
     alert('Function dependency left hand side or right hand side cannot be empty.');
     return;
   }
+
+  // Display confirmed fd area if it was empty and invisible
+  var area = document.getElementById('confirmed_fd');
+  area.setAttribute('style', 'display:block');
 
   // Display relation in the relation_box
   var fd = {left:[] , right:[], type:'fd'};
@@ -229,6 +234,10 @@ function clearRelationOutputs () {
 
   output.value = null;
   _fds = [];
+
+  // Hide confirmed fd area when it is empty
+  var area = document.getElementById('confirmed_fd');
+  area.setAttribute('style', 'display:none');
 }
 
 // ------------------------------------
@@ -304,3 +313,4 @@ function createTable () {
 
   closePopup();
 }
+
