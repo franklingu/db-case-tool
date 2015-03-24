@@ -178,18 +178,23 @@ function LTK( fd,tableName){
 	}
 	
 	for(var i=0;i<R.length;i++) removeDulplicateSet(R[i].keys);
-	//var result= "Final result: \n" ;
+	resultString += "Final result: \n" ;
     var result = "";
 	for(var i=0;i<R.length;i++){
 		result += "R" +(i+1)+":{" +
 			numToAttribute(tableName,R[i].A) +"} ";
-		result+="keys:"
+		resultString += "R" +(i+1)+":{" +
+			numToAttribute(tableName,R[i].A) +"} ";
+		result+="keys:";
+		resultString+="keys:";
 		var keys=R[i].keys;
-		for(var j=0;j<keys.length;j++)
-			result += " (" +numToAttribute(tableName,keys[j]) + "); ";
-		result +="";
+		for(var j=0;j<keys.length;j++){
+			result += " (" +numToAttribute(tableName,keys[j]) + ");";
+			resultString += "(" +numToAttribute(tableName,keys[j]) + "); \n";
+		}
+		//result +="";
 	}
-	return (result);
+	return (result + "|" + resultString);
 }
 
 

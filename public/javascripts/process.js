@@ -7,7 +7,7 @@ function getLTK(){
 	result = LTK(getFDNumber(table),table);
 	//$('#output-algo').html(result);
 	//document.getElementById('result_output').value = result;
-	makeTable(result);
+	makeDisplay(result);
 
 
 }
@@ -23,12 +23,12 @@ function getBCNFDecomposition(){
 		var display = $('#variable_output').val();
 		console.log(display);
 		var process = '{'+display.substring(0, display.length)+'}';
-		makeTable(process);
+		makeDisplay(process + '|' + "No Change");
 
 	}
 	//$('#output-algo').html(result);
 	else{
-		makeTable(result);
+		makeDisplay(result);
 	}
 	
 
@@ -84,6 +84,12 @@ function getFDInput(){
     return fdInputArr;
 
 }
+function makeDisplay(inputData){
+	var inputDataArr = inputData.split('|');
+	console.log(inputDataArr);
+	makeTable(inputDataArr[0]);
+	makeStep(inputDataArr[1]);
+}
 function makeTable(inputData){
 	var currentTable = document.createElement("table");
 	var currentRow, inputStr, relationLeftBreak, relationRightBreak, fdInput, fdInputArr;
@@ -120,6 +126,11 @@ function makeTable(inputData){
 	var currentOutput = document.getElementById("output-result-div");
 	clearChildren(currentOutput);
 	currentOutput.appendChild(currentTable);
+}
+
+function makeStep(inputData){
+	var currentOutputMsg = document.getElementById('step-message');
+	currentOutputMsg.innerText = inputData;
 }
 
 function clearChildren(node){
