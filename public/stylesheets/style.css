@@ -9,7 +9,7 @@ h1 {
   padding: 0px;
   font: 60px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: bold;
-  margin-left: 50px;
+  margin-left: 200px;
 }
 
 h2 {
@@ -340,3 +340,20 @@ div.tabContent.hide { display: none; }
 .relation-option-unselected {
   background-color: rgb(255, 255, 255);
 }
+
+.output_result {
+  background: rgb(155,155,155);
+  font-family: "arial";
+  font-size: 18px;
+  width: 20%;
+}
+
+
+  .output_result td,
+  .output_result th {
+    //background-color: #fff !important;
+  }
+  .output_result-bordered th,
+  .output_result-bordered td {
+    //border: 1px solid #ddd !important;
+  }

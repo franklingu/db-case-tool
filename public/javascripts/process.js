@@ -78,6 +78,7 @@ function makeTable(inputData){
 	var currentRow, inputStr, relationLeftBreak, relationRightBreak, fdInput, fdInputArr;
 	
 	currentTable.setAttribute("border","2");
+	currentTable.setAttribute("class", "output_result");
 	var inputDataArr = inputData.split(";");
 	for(var i = 0; i < inputDataArr.length; i++){
 		if(inputDataArr[i] != ""){
@@ -88,6 +89,9 @@ function makeTable(inputData){
 			fdInput = inputStr.substring(relationLeftBreak+1, relationRightBreak);
 			fdInput = fdInput.trim();
 			fdInputArr = fdInput.split(",");
+			var currentRelationName = document.createElement("tr");
+			currentRelationName.innerHTML = "R" + (i + 1);
+			currentRow.appendChild(currentRelationName);
 			for( var j = 0; j < fdInputArr.length; j++){
 				if(fdInputArr[j] != ""){
 				    var currentCol = document.createElement("td");

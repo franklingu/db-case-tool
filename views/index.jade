@@ -2,7 +2,7 @@ extends layout
 
 block content
 
-  img(src='/images/icon.png', style='float:left;')
+  img(src='/images/icon.jpg', style='float:left; width: 13%; height:13%')
   h1= title
   br
 
@@ -79,6 +79,7 @@ block content
       div#output-algo-1
       //textarea(id='result_output', class='result_output', disabled)
       div#output-result-div
+      div#step-message
 
     br
     br
@@ -103,6 +104,7 @@ block content
       h2 Step 5: Results
       div#output-algo-2
       div#output-result-div-2
+
 
     br
     br
