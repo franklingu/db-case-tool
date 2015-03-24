@@ -1,6 +1,12 @@
  
     // function to show popup screen
     function showPopup(){
+        //var attribute_input = $('#step1_sub').find('div');
+        if(_variables.length === 0) {
+            alert("Please add attributes!");
+            return;
+        }
+
         var docHeight = $(document).height(); //grab the height of the page
         var scrollTop = $(window).scrollTop(); //grab the px value from the top of the page to where you're scrolling
         $('.overlay-bg').show().css({'height' : docHeight}); //display your popup background and set height to the page height
