@@ -106,7 +106,7 @@ function makeTable(inputData){
 			fdInput = inputStr.substring(relationLeftBreak+1, relationRightBreak);
 			fdInput = fdInput.trim();
 			fdInputArr = fdInput.split(",");
-			var currentRelationName = document.createElement("tr");
+			var currentRelationName = document.createElement("td");
 			currentRelationName.innerHTML = "R" + (i + 1);
 			currentRow.appendChild(currentRelationName);
 			for( var j = 0; j < fdInputArr.length; j++){

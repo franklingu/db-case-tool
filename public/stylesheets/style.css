@@ -36,6 +36,7 @@ h2 {
   width: 95%;
   height: 100%;
   border: 1px solid black;
+  background: #f1f0ee;
 }
 #step1_sub {
   position: relative;
@@ -49,7 +50,7 @@ h2 {
 }
 .var_inputbox {
   float: left;
-  //background: #f8f8f8;
+  background: #f1f0ee;
   //color: #000000;
   width: 20%;
   cursor: text;
@@ -82,12 +83,14 @@ h2 {
 }
 
 #step2 {
+  background: #f1f0ee;
   width: 95%;
   height: 240px;
   border: 1px solid black;
 }
 
 #step2_lhs {
+  background: #f1f0ee;
   float: left;
   position: relative;
   top: 10%;
@@ -105,6 +108,7 @@ h2 {
 }
 
 #step2_rhs {
+  background: #f1f0ee;
   float: right;
   position: relative;
   top: 10%;
@@ -114,7 +118,6 @@ h2 {
   border: 1px solid black;
 }
 
-
 ul#tabs { list-style-type: none; margin: 30px 0 0 0; padding: 0 0 0.3em 0; }
 ul#tabs li { display: inline; }
 ul#tabs li a { color: #42454a; background-color: #dedbde; border: 1px solid #c9c3ba; border-bottom: none; padding: 0.3em; text-decoration: none; }
@@ -122,6 +125,8 @@ ul#tabs li a:hover { background-color: #f1f0ee; }
 ul#tabs li a.selected { color: #000; background-color: #f1f0ee; font-weight: bold; padding: 0.7em 0.3em 0.38em 0.3em; }
 div.tabContent { border: 1px solid #c9c3ba; padding: 0.5em; background-color: #f1f0ee; }
 div.tabContent.hide { display: none; }
+
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  * For Class: .xx
@@ -168,9 +173,9 @@ div.tabContent.hide { display: none; }
 
 
 
-
-
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * Pop up window for table input.
+ */
 .main-content {
   height: 800px;
   width: 1000px;
@@ -270,8 +275,8 @@ div.tabContent.hide { display: none; }
 }
 
 
-/* For 1NF,2NF,3NF,BCNF buttons */
-.relation_option_button {
+/* For BCNF-decomposition, Berstein, Improved Ver, LTK buttons */
+.relation_option_button{
   margin-left: 75px;
   width: 170px;
   height: 50px;
@@ -281,25 +286,10 @@ div.tabContent.hide { display: none; }
   border:2px solid #1b9254;
   border-radius: 6px;
   font-weight: bold;
-
 }
 
 
-.boxes{
-  background: #f8f8f8;
-  border-bottom: #b7b7b7 3px solid;
-  border-left: #b7b7b7 3px solid;
-  border-right: #b7b7b7 3px solid;
-  border-top: #b7b7b7 solid;
-  color: #000000;
-  cursor: text;
-  font-family: "arial";
-  font-size: 14pt;
-  padding: 1px;
-}
-
-
-
+/* Used for display the table input from user*/
 .table {
   width: 60%;
   max-width: 100%;
@@ -312,20 +302,17 @@ div.tabContent.hide { display: none; }
   display: table;
   border-collapse: separate;
 }
-
 .table_head {
   text-align: middle;
   width: 60%;
   max-width: 100%;
   border-bottom: 1px solid #dddddd;
 }
-
 .tr {
   display: table-row;
   vertical-align: inherit;
   border-color: inherit;
 }
-
 .th {
   width: 20%;
   background: rgb(155,155,155);;
@@ -341,21 +328,47 @@ div.tabContent.hide { display: none; }
   background-color: rgb(255, 255, 255);
 }
 
+
+/* Used for display the final result */
 .output_result {
+  background: rgb(250,250,250);
+
+  border: 2px solid #1b9254;
+  border-collapse: collapse;
+  border-radius: 4px;
+  border-style: hidden; /* hide standard table (collapsed) border */
+  box-shadow: 0 0 0 2px #1b9254; /* this draws the table border  */ 
+
+  width: 60%;
+  height: 50px;
   margin-left: 6%;
-  background: rgb(190,190,190);
+
   font-family: "arial";
   font-size: 16px;
-  width: 20%;
+
+  text-align:center; 
+  vertical-align:middle;  
+
+}
+.output_result td,
+.output_result th {
+  border: 2px solid #1b9254;
+  border-radius: 3px;
+  height: 50px;
+  font-weight: bold;
+  text-align:center; 
+  vertical-align:middle;
+}
+.output_result tr {
+  height: 50px;
+  text-align:center; 
+  vertical-align:middle;
 }
 
 
-  .output_result td,
-  .output_result th {
-    //background: rgb(1,1,1);
-  }
-  .output_result-bordered th,
-  .output_result-bordered td {
-    border-color: rgb(33, 178, 102);
-    //border: 1px solid #ddd !important;
-  }
+#step-message {
+  margin-top: 20px;
+  margin-left: 6%;
+  font-family: "arial";
+  font-size: 14px;
+}
