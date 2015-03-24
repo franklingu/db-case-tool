@@ -39,7 +39,6 @@ h2 {
 }
 #step1_sub {
   position: relative;
-  width: 50%;
   height: 100%;
   top: 1px;
   margin-left: 2px;
@@ -52,6 +51,7 @@ h2 {
   float: left;
   //background: #f8f8f8;
   //color: #000000;
+  width: 20%;
   cursor: text;
   border: 0px;
   margin: 3px;
@@ -342,18 +342,20 @@ div.tabContent.hide { display: none; }
 }
 
 .output_result {
-  background: rgb(155,155,155);
+  margin-left: 6%;
+  background: rgb(190,190,190);
   font-family: "arial";
-  font-size: 18px;
+  font-size: 16px;
   width: 20%;
 }
 
 
   .output_result td,
   .output_result th {
-    //background-color: #fff !important;
+    //background: rgb(1,1,1);
   }
   .output_result-bordered th,
   .output_result-bordered td {
+    border-color: rgb(33, 178, 102);
     //border: 1px solid #ddd !important;
   }
