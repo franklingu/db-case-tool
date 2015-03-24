@@ -75,23 +75,19 @@ function getFDInput(){
 }
 function makeTable(inputData){
 	var currentTable = document.createElement("table");
+	var currentRow, inputStr, relationLeftBreak, relationRightBreak, fdInput, fdInputArr;
 	
-	//
 	currentTable.setAttribute("border","2");
-
 	var inputDataArr = inputData.split(";");
-	console.log(inputDataArr);
 	for(var i = 0; i < inputDataArr.length; i++){
 		if(inputDataArr[i] != ""){
-			console.log(inputDataArr[i]);
-			var currentRow = document.createElement("tr"); 
-			
-			var inputStr = inputDataArr[i];
-			var relationLeftBreak = inputStr.indexOf('{');
-			var relationRightBreak = inputStr.indexOf('}');
-			var fdInput = inputStr.substring(relationLeftBreak+1, relationRightBreak);
+			currentRow = document.createElement("tr"); 
+			inputStr = inputDataArr[i];
+			relationLeftBreak = inputStr.indexOf('{');
+			relationRightBreak = inputStr.indexOf('}');
+			fdInput = inputStr.substring(relationLeftBreak+1, relationRightBreak);
 			fdInput = fdInput.trim();
-			var fdInputArr = fdInput.split(",");
+			fdInputArr = fdInput.split(",");
 			for( var j = 0; j < fdInputArr.length; j++){
 				if(fdInputArr[j] != ""){
 				    var currentCol = document.createElement("td");
@@ -100,27 +96,21 @@ function makeTable(inputData){
 			    }
 			}
 		}
-		currentTable.appendChild(currentRow);
+		if (currentRow) {
+			currentTable.appendChild(currentRow);
+		}
+		currentRow = undefined;
 	}
-
-	// var keyLeftBreak = inputStr.indexOf('(');
-	// var keyRightBreak = inputStr.indexOf(')');
-	// var keyInput = inputStr.substring(keyLeftBreak+1, keyRightBreak);
-	// var realKeyLeftBreak = keyInput.indexOf(':');
-	// var realKeyInput = keyInput.substring(realKeyLeftBreak+1);
 
 	var currentOutput = document.getElementById("output-result-div");
 	clearChildren(currentOutput);
 	currentOutput.appendChild(currentTable);
-
 }
-
-
 
 function clearChildren(node){
 	while (node.hasChildNodes()) {
-          node.removeChild(node.lastChild);
-      }
+    node.removeChild(node.lastChild);
+  }
 }
 
 function clearCookie(){
