@@ -66,17 +66,19 @@ $(document).ready(function () {
   $('#process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
-      outputForResult += 'Generated tables: ';
+      //outputForResult += 'Generated tables: ';
       for (var i = result.tables.length - 1; i >= 0; i--) {
-        outputForResult += JSON.stringify(result.tables[i]) + '<br>';
+        outputForResult += '{' + (result.tables[i]) + '};';
       }
-      outputForResult += '<br><br>';
+      //outputForResult += '<br><br>';
       for (i = 0; i <= result.steps.length; i++) {
         if (result.steps[i]) {
-          outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
+          //outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
         }
       }
-      $('#output-algo').html(outputForResult);
+      //outputForResult += '};';
+      //$('#output-algo').html(outputForResult);
+      makeTable(outputForResult);
     }
 
     var selectedFeature = $('#select_option').val();

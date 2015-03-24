@@ -114,7 +114,9 @@ function numToAttribute(table_name, num)
 		i++;
 	}
 	ret = ret.split("").reverse().join("");
-	return ret.substr(1, ret.length);
+	ret = ret.substr(1, ret.length);
+	ret = ret.split("").reverse().join("");
+	return ret;
 }
 
 // JavaScript Document
