@@ -69,14 +69,14 @@ block content
     button(id='LTK' class='relation_option_button', chosen='0') LTK
     div
       h2 Step 4: Process
-      button(id='process_button', class='button2') Process
+      button(class='process_button', class='button2') Process
     br
     br
     br
 
     div
       h2 Step 5: Results
-      div#output-algo
+      div#output-algo-1
       //textarea(id='result_output', class='result_output', disabled)
       div#output-result-div
 
@@ -94,16 +94,15 @@ block content
 
     div
       h2 Step 4: Process
-      button(id='process_button', class='button2') Process
+      button(class='process_button', class='button2') Process
     br
     br
     br
 
     div
       h2 Step 5: Results
-      div#output-algo
-      //textarea(id='result_output', class='result_output', disabled)
-      div#output-result-div
+      div#output-algo-2
+      div#output-result-div-2
 
     br
     br
@@ -124,79 +123,4 @@ block content
 
   br
 
-  // ----------------------------------------- -----------------------------------------
-  // Instructions for Third Step
-  // ----------------------------------------- -----------------------------------------
-  //div(id='feature-selection')
-    div
-      h2(style='float:left') Chose one of the two features for step 3.
-      select(id='select_option')
-        option(value='Feature 1') Feature 1
-        option(value='Feature 2') Feature 2
-    br
-    br
-    div
-      p(class='small') - Feature 1: {attribute, functional dependency, relation form} -> {table}
-      p(class='small') - Feature 2: {attribute, functional dependency, table} -> {relation form}
-  //br
-
-
-  // ----------------------------------------- -----------------------------------------
-  // Third Step: choose one from the two features
-  // ----------------------------------------- -----------------------------------------
-  //div(id='feature1', style='display:block')
-    // Third step.
-    h2 Step 3: Select relation forms.
-    button(id='Decomposition' class='relation_option_button', chosen='0') BCNFDecomposition
-    button(id='Berstein' class='relation_option_button', chosen='0') Berstein
-    button(id='BersteinSelf' class='relation_option_button', chosen='0') Berstein Self Improved
-    button(id='LTK' class='relation_option_button', chosen='0') LTK
-
-  //div(id='feature2', style='display:none')
-    // Third step.
-    h2 Step 3: Design your table.
-    button(id='add_table', class='button2', onclick='showPopup();createVarSelect()') Add New Table
-    button(id='clear_tables', class='button2', style='display: none;') Clear
-    div(id='table_area')
-
-  //div(class="overlay-bg")
-  //div(class="overlay-content popup")
-    form(name="input", action="action_page.php", method="get")
-      | Table Name:
-      input(id='new_table_name', type="text", name="tableName")
-      br
-      | Choose Attributes:
-      select(multiple class="form-control", id='Var_Select')
-        // Options are set in 'pageManager.js'
-      br
-      br
-    button(class="button2", onclick='createTable()') Submit
-    button(class="button2", onclick='closePopup()') Close
-
-  br
-  br
-  br
-
-
-  // ----------------------------------------- -----------------------------------------
-  // Fourth Step: call functions from back-end
-  // ----------------------------------------- -----------------------------------------
-  //div
-    h2 Step 4: Process
-    button(id='process_button', class='button2') Process
-  //br
-  //br
-  //br
-
-
-  // ----------------------------------------- -----------------------------------------
-  // Fifth Step: display results
-  // ----------------------------------------- -----------------------------------------
-  //div
-    h2 Step 5: Results
-    div#output-algo
-    //textarea(id='result_output', class='result_output', disabled)
-    div#output-result-div
-
-  //br
-  //br
+  
