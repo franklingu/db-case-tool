@@ -67,4 +67,6 @@
       return url.substring( hashPos + 1 );
     }
 
+    init();
+
     //]]>
