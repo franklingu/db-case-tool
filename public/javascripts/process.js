@@ -21,10 +21,11 @@ function getBCNFDecomposition(){
 	result = BCNFDecomposition(getFDNumber(table),table);
 	if(result == "No"){
 		var display = $('#variable_output').val();
+		console.log(display);
 		var process = '{'+display.substring(0, display.length)+'}';
-		makeTable(result);
+		makeTable(process);
 
-	};
+	}
 	//$('#output-algo').html(result);
 	else{
 		makeTable(result);
