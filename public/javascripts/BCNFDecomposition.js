@@ -46,7 +46,7 @@ function BCNFDecomposition(fd, tableName){
 	if(FDNotInBCNF.length != 0)
 		inBCNF = false;
 	else{
-		output += "No change\n";
+		output += "No";
 		return output;	
 	}
 	
