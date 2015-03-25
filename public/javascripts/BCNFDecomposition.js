@@ -1,4 +1,4 @@
-function findFDNotInBCNF(fd, tableName) {
+function findFDNotInBCNF(fd, tableName, fdt) {
 	var FDNotInBCNF = [];
 	var lhs = [];
 	var closure=getClosure(fd, tableName);
@@ -17,15 +17,13 @@ function findFDNotInBCNF(fd, tableName) {
 		if(!is_superkey && setExclude(closure[i],i))
 			lhs.push(i);
 	}
-	//alert(FDNotInBCNF.length);
-	//alert(FDNotInBCNF[0].left, FDNotInBCNF[0].right);
 	
 	for(var i=0;i<fd.length;i++)
 		for(var j=0;j<lhs.length;j++)
-			if(fd[i].left == lhs[j]){
+			if(fd[i].left == lhs[j] && (fd[i] != fdt)){
 				FDNotInBCNF.push(fd[i]);
 			}
-	//alert(FDNotInBCNF);
+	
 	
 	return FDNotInBCNF;
 }
@@ -43,7 +41,7 @@ function BCNFDecomposition(fd, tableName){
 	stepOutput += "BCNF Decomposition Method\n\n";
 	
 	//find all the fd not in BCNF and push them into FDNotInBCNF
-	FDNotInBCNF = findFDNotInBCNF(fd, tableName);
+	FDNotInBCNF = findFDNotInBCNF(fd, tableName, "");
 	
 	if(FDNotInBCNF.length != 0)
 		inBCNF = false;
@@ -69,7 +67,7 @@ function BCNFDecomposition(fd, tableName){
 		var temp = "R" + step + ": {" + numToAttribute(tableName, fdt.left) + "," + numToAttribute(tableName, fdt.right) + "}" + "(keys:" + numToAttribute(tableName, fdt.left) + ");"; 
 		
 		output += temp
-		stepOutput += temp;
+		stepOutput += temp + "\n";
 
 		var count = 0;
 		//update the remaining fds
@@ -82,14 +80,13 @@ function BCNFDecomposition(fd, tableName){
 		}
 		
 		//alert("length " + fd.length);
-		
 		if(fd.length == 0){
 			//alert("here");
 			inBCNF = true;
 			//relations.push(mask);
 		}
 		else{
-			FDNotInBCNF = findFDNotInBCNF(fd, tableName);
+			FDNotInBCNF = findFDNotInBCNF(fd, tableName ,fdt);
 			if(FDNotInBCNF.length == 0){
 				inBCNF = true;
 				//group all the remaining attributes
@@ -98,10 +95,16 @@ function BCNFDecomposition(fd, tableName){
 		}
 		step++;
 		if(inBCNF){
-			 //stepOutput += "R" + step + ": {" + numToAttribute(tableName, mask) + "}" + "(keys:" + numToAttribute(tableName, mask) + ")\n"; 
 			 var temp = "R" + step + ": {" + numToAttribute(tableName, mask) + "}" + "(keys:" + numToAttribute(tableName, mask) + ")"; 
-			 output += temp;
-			 stepOutput += temp;
+			 var leftIndex = temp.indexOf('{');
+			 var rightIndex = temp.indexOf('}');
+			 var testStr = temp.substring(leftIndex+1, rightIndex);
+
+			 if(testStr.indexOf(',') >= 0){
+			     output += temp;
+			     stepOutput += temp + "\n";	 	
+			 }
+
 		    
 		}
 		
