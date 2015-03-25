@@ -66,12 +66,16 @@ $(document).ready(function () {
   $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
+<<<<<<< HEAD
       //var outputForResultStep = 'Generated tables: \n';
       var outputForResultStep = 'Steps: \n';
+=======
+>>>>>>> 8da39552ab5d9cb3ecdb4b653b67da6ba6ab34d0
       for (var i = result.tables.length - 1; i >= 0; i--) {
         outputForResult += '{' + (result.tables[i]) + '};';
         //outputForResultStep += '{' + (result.tables[i]) + '};\n';
       }
+<<<<<<< HEAD
       //outputForResultStep += '\n\n';
       for (i = 0; i <= result.steps.length; i++) {
         if (result.steps[i]) {
@@ -81,6 +85,14 @@ $(document).ready(function () {
       //outputForResult += '};';
       //$('#output-algo').html(outputForResult);
       makeDisplay(outputForResult + '|' + outputForResultStep);
+=======
+      for (i = 0; i <= result.steps.length; i++) {
+        if (result.steps[i]) {
+          // outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
+        }
+      }
+      makeTable(outputForResult);
+>>>>>>> 8da39552ab5d9cb3ecdb4b653b67da6ba6ab34d0
     }
 
     var selectedFeature = $('#tabs>li>a.selected').html();
@@ -102,12 +114,14 @@ $(document).ready(function () {
         getLTK();
       }
     } else if (selectedFeature === 'Feature 2') {
-      var is2NF = true, is3NF = true, isBCNF = true;
+      var is2NF = true, is3NF = true, isBCNF = true, isLossless = true, isPreserving = true;
+      var tablesToTest = [];
       $('#table_area').find('table').each(function () {
         var attrs = [];
         $(this).find('td').each(function () {
           attrs.push($(this).html());
         });
+        tablesToTest.push(attrs);
         if (is2NF && !dbtester.is2NF(attrs, _fds)) {
           is2NF = false;
           is3NF = false;
@@ -121,10 +135,14 @@ $(document).ready(function () {
           isBCNF = false;
         }
       });
+      isLossless = dbtester.isLossless(tablesToTest, _fds);
+      isPreserving = dbtester.isDependencyPreserving(tablesToTest, _fds);
       var outputForNFTests = '';
       outputForNFTests += ('The table is ' + (is2NF ? '' : 'not ') + 'in second normal form<br>');
       outputForNFTests += ('The table is ' + (is3NF ? '' : 'not ') + 'in third normal form<br>');
       outputForNFTests += ('The table is ' + (isBCNF ? '' : 'not ') + 'in Boyce Codd normal form<br>');
+      outputForNFTests += ('The table is ' + (isLossless ? '' : 'not ') + 'lossless<br>');
+      outputForNFTests += ('The table is ' + (isPreserving ? '' : 'not ') + 'dependency preserving<br>');
       $('#output-algo-2').html(outputForNFTests);
     } else {
       window.alert('Please select a feature');
@@ -215,6 +233,12 @@ function clearVariables () {
 
     // Clear the global variable
     _variables = [];
+
+    // Clear fd-box
+    clearRelations();
+
+    // Clear confirmed-box
+    clearRelationOutputs();
 }
 
 // ------------------------------------
@@ -290,8 +314,8 @@ function createTable () {
   var table_area = document.getElementById('table_area');
   var new_table = document.createElement('table');
   var new_table_name = document.getElementById('new_table_name').value;
-  new_table.setAttribute('style', 'margin-left:80px;');
-  new_table.setAttribute('class', 'table');
+  new_table.setAttribute('style', 'margin-left:5%;');
+  new_table.setAttribute('class', 'output_result');
 
   // Table head
   if(new_table_name == null || new_table_name == '') new_table_name = 'Table';
@@ -301,7 +325,8 @@ function createTable () {
   var tr2 = document.createElement('tr');
   var th2 = document.createElement('th');
   var td2;
-  th2.setAttribute('class', 'th');
+  //th2.setAttribute('class', 'th');
+  th2.setAttribute('style', 'background: rgb(200,200,200); width:15%;');
   th2.appendChild(document.createTextNode(new_table_name+': '));
   tr2.appendChild(th2);
   for(var i=0; i<result.length; i++) {
