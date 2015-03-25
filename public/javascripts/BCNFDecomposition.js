@@ -2,6 +2,10 @@ function findFDNotInBCNF(fd, tableName, fdt) {
 	var FDNotInBCNF = [];
 	var lhs = [];
 	var closure=getClosure(fd, tableName);
+
+	// var existingArr=getAttribute(tableName);
+	// console.log(existingArr);
+
 	//alert(closure);
 	var keys = getKeys(closure);
 	var inBCNF = true;
@@ -24,7 +28,7 @@ function findFDNotInBCNF(fd, tableName, fdt) {
 				FDNotInBCNF.push(fd[i]);
 			}
 	
-	
+	console.log(FDNotInBCNF);
 	return FDNotInBCNF;
 }
 
@@ -37,6 +41,10 @@ function BCNFDecomposition(fd, tableName){
 	var step = 1;
 	var output = "";
 	var stepOutput = "";
+	var relationAttrArr = [];
+	var tableNum = 0;
+	var tableArr = [];
+
 
 	stepOutput += "BCNF Decomposition Method<br><br>";
 	
@@ -51,15 +59,17 @@ function BCNFDecomposition(fd, tableName){
 	}
 	
 	var relations = [];
-	
-	//suppose no redundancy here (bug here to solve)
-	
+		
 	//decompose one by one
 	while(!inBCNF){
 		//decompose on one FD and insert the table
 		var fdt = FDNotInBCNF[0];
 		FDNotInBCNF.splice(0,1);
+		
 		relations.push(fdt.left | fdt.right);
+		//construct new table
+
+
 		mask = setExclude(mask, fdt.right);
 		
 		stepOutput += "Step" + step + ": ";
@@ -67,6 +77,7 @@ function BCNFDecomposition(fd, tableName){
 		              + " makes the relation not in BCNF<br>";
 		var temp = "R" + step + ": {" + numToAttribute(tableName, fdt.left) + "," + numToAttribute(tableName, fdt.right) + "}" + "(keys:" + numToAttribute(tableName, fdt.left) + ");"; 
 		
+
 		output += temp
 		stepOutput += temp + "<br>";
 
@@ -76,9 +87,13 @@ function BCNFDecomposition(fd, tableName){
 			if(setIntersect(fd[count].left, fdt.right) || setIntersect(fd[count].right, fdt.right)){
 				fd.splice(count,1);
 			}
-			else
+			else{
 				count++;
+			}
 		}
+
+
+
 		
 		//alert("length " + fd.length);
 		if(fd.length == 0){
@@ -110,3 +125,20 @@ function BCNFDecomposition(fd, tableName){
 
 	return output + "|" +stepOutput;
 }
+
+function checkIn (fd, attributeArr){
+	var flagLeft = false;
+	var flagRight = false;
+
+	for(var i = 0; i < attributeArr.length ; i++){
+		if( fd.left == attributeArr[i]){
+			flagLeft = true;
+		}
+		if( fd.right == attributeArr[i]){
+			flagRight = true;
+		}
+
+	}
+	return (flagLeft && flagRight);
+}
+

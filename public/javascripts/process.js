@@ -118,8 +118,10 @@ function makeTable(inputData){
 	currentTable.setAttribute("border","2");
 	currentTable.setAttribute("class", "output_result");
 	var inputDataArr = inputData.split(";");
+	console.log(inputDataArr);
 	for(var i = 0; i < inputDataArr.length; i++){
-		if(inputDataArr[i] != ""){
+		var indexOfStart = inputDataArr[i].indexOf('{');
+		if(inputDataArr[i].length > 0 && indexOfStart >=0){
 			var tableCurrentArr = [];
 			currentRow = document.createElement("tr"); 
 			inputStr = inputDataArr[i];
@@ -141,7 +143,7 @@ function makeTable(inputData){
 			    }
 			}
 		}
-		if (currentRow) {
+		if (currentRow && inputDataArr[i].length > 0 && indexOfStart >=0) {
 			currentTable.appendChild(currentRow);
 			tableArr.push(tableCurrentArr);
 		}

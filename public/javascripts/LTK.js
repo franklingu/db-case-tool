@@ -38,7 +38,7 @@ function preparatory( _fd, tableName){
 	removeEmptyFD(fd);
 	//step 2, 3: group fds together by equivalent lhs,
 	//build relations and synthesized keys
-	//
+
 	var vis = new Array(fd.length);
 	var res =[];
 
@@ -48,10 +48,8 @@ function preparatory( _fd, tableName){
 		vis[i]=true;
 		var p=fd[i];
 		var A=p.left | p.right;
-		//alert(A);
 		var synKeys=new Array();
 		synKeys.push(p.left);
-		//alert(synKeys);
 		for(var j=i+1;j<fd.length;j++){
 			if(vis[j])continue;
 			var q=fd[j];
@@ -59,7 +57,6 @@ function preparatory( _fd, tableName){
 				vis[j]=true;
 				A |= q.left | q.right;
 				synKeys.push(q.left);
-				//alert(synKeys);
 			}
 		}
 		
@@ -76,7 +73,6 @@ function preparatory( _fd, tableName){
 	for(var i =0;i<res.length;i++){
 		if(closure[res[i].A]==allAttr){
 			hasKey=true;
-			
 			break;
 		}
 	}
@@ -97,7 +93,6 @@ function preparatory( _fd, tableName){
 function superfluousAttributeDetection (R, B, I,fd,tableName){
 	var Ai=R[I].A;
 	var isSup=true;
-	//construct Ki prime
 	var Ki=R[I].keys;
 	var Kip = new Array();
 	var Kipr = new Array();
@@ -108,10 +103,8 @@ function superfluousAttributeDetection (R, B, I,fd,tableName){
 			Kipr.push(Ki[i]);
 	}
 	if(Kip.length ==0) {var c= new Array();return c;}
-	//construct Gi(B) prime
 	var GiBp = new Array();
 	for(var i=0;i<R.length;i++){ 
-		//alert(R.length);
 		var tAi=R[i].A;
 		var K=R[i].keys;
 		for(var j=0;j<K.length;j++){
@@ -122,7 +115,6 @@ function superfluousAttributeDetection (R, B, I,fd,tableName){
 			}
 			
 			GiBp.push(PII(K[j],t));
-			//alert(PII(K[j],t));
 		}
 	}
 	for(var i=0;i<Kip.length;i++){
@@ -191,9 +183,9 @@ function LTK( fd,tableName){
 		resultString+="keys:";
 		var keys=R[i].keys;
 		for(var j=0;j<keys.length;j++){
-			var temp1= " (" +numToAttribute(tableName,keys[j]) + ");";
+			var temp1= " (" +numToAttribute(tableName,keys[j]) + "),";
 
-			result += temp1
+			result += ";" + temp1;
 			resultString += temp1 + "<br>";
 		}
 		//result +="";
