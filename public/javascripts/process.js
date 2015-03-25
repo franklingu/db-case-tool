@@ -1,3 +1,6 @@
+var fd = {left:[], right:[], type:'fd'};
+
+
 function getLTK(){
 
 	var result;
@@ -29,7 +32,7 @@ function getBCNFDecomposition(){
 	//$('#output-algo').html(result);
 	else{
 		console.log(result);
-		makeDisplay(result);
+	    makeDisplay(result);
 	}
 	
 
@@ -63,6 +66,14 @@ function processData(table){
 
 		   var left = tempFD.substring(0, leftbreakIndex);
 		   var right = tempFD.substring(rightStartIndex);
+		   
+		   var leftArr = left.split(',');
+		   fd.left = leftArr;
+		   var rightArr = right.split(',');
+		   fd.right = rightArr; 
+		   fd = {left:[], right:[], type:'fd'};
+
+
 		   console.log(left);
 		   console.log(right);
 		   insertFD(table, left, right , 0);
@@ -88,10 +99,22 @@ function getFDInput(){
 function makeDisplay(inputData){
 	var inputDataArr = inputData.split('|');
 	console.log(inputDataArr);
-	makeTable(inputDataArr[0]);
+	var dependency = makeTable(inputDataArr[0]);
 	makeStep(inputDataArr[1]);
+	var currentOutput = document.getElementById("step-message");
+
+	if(dependency){
+		
+		currentOutput.innerText += "\n" + "The schema is dependency preserving";
+	}
+	else{
+	    currentOutput.innerText += "\n" + "The schema is not dependency preserving";
+	}
 }
 function makeTable(inputData){
+
+	var tableArr = [];
+
 	var currentTable = document.createElement("table");
 	var currentRow, inputStr, relationLeftBreak, relationRightBreak, fdInput, fdInputArr;
 	
@@ -100,6 +123,7 @@ function makeTable(inputData){
 	var inputDataArr = inputData.split(";");
 	for(var i = 0; i < inputDataArr.length; i++){
 		if(inputDataArr[i] != ""){
+			var tableCurrentArr = [];
 			currentRow = document.createElement("tr"); 
 			inputStr = inputDataArr[i];
 			relationLeftBreak = inputStr.indexOf('{');
@@ -116,18 +140,26 @@ function makeTable(inputData){
 				    var currentCol = document.createElement("td");
 				    currentCol.innerText = fdInputArr[j];
 				    currentRow.appendChild(currentCol);
+				    tableCurrentArr.push(fdInputArr[j]);
 			    }
 			}
 		}
 		if (currentRow) {
 			currentTable.appendChild(currentRow);
+			tableArr.push(tableCurrentArr);
 		}
+
 		currentRow = undefined;
 	}
+
+
 
 	var currentOutput = document.getElementById("output-result-div");
 	clearChildren(currentOutput);
 	currentOutput.appendChild(currentTable);
+	var dependencyPreserving = dbtester.isDependencyPreserving(tableCurrentArr,fd);
+	return dependencyPreserving;
+
 }
 
 function makeStep(inputData){
@@ -152,4 +184,7 @@ function clearCookie(){
         {"table":"test1", "left": "", "right": "", "type": ""}
       ]
     };
+
 }
+
+

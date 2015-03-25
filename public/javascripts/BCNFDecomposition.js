@@ -109,6 +109,10 @@ function BCNFDecomposition(fd, tableName){
 		}
 		
 	}
+	console.log(relations);
+
 	return output + "|" +stepOutput;
 }
+
+
 
