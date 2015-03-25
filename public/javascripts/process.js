@@ -28,6 +28,7 @@ function getBCNFDecomposition(){
 	}
 	//$('#output-algo').html(result);
 	else{
+		console.log(result);
 		makeDisplay(result);
 	}
 	
@@ -107,6 +108,7 @@ function makeTable(inputData){
 			fdInput = fdInput.trim();
 			fdInputArr = fdInput.split(",");
 			var currentRelationName = document.createElement("td");
+			currentRelationName.setAttribute('style', 'background: rgb(200,200,200); width:15%;');
 			currentRelationName.innerHTML = "R" + (i + 1);
 			currentRow.appendChild(currentRelationName);
 			for( var j = 0; j < fdInputArr.length; j++){
@@ -130,6 +132,7 @@ function makeTable(inputData){
 
 function makeStep(inputData){
 	var currentOutputMsg = document.getElementById('step-message');
+	currentOutputMsg.innerText = "";
 	currentOutputMsg.innerText = inputData;
 }
 
