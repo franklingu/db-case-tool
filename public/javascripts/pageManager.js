@@ -294,8 +294,8 @@ function createTable () {
   var table_area = document.getElementById('table_area');
   var new_table = document.createElement('table');
   var new_table_name = document.getElementById('new_table_name').value;
-  new_table.setAttribute('style', 'margin-left:80px;');
-  new_table.setAttribute('class', 'table');
+  new_table.setAttribute('style', 'margin-left:5%;');
+  new_table.setAttribute('class', 'output_result');
 
   // Table head
   if(new_table_name == null || new_table_name == '') new_table_name = 'Table';
@@ -305,7 +305,8 @@ function createTable () {
   var tr2 = document.createElement('tr');
   var th2 = document.createElement('th');
   var td2;
-  th2.setAttribute('class', 'th');
+  //th2.setAttribute('class', 'th');
+  th2.setAttribute('style', 'background: rgb(200,200,200); width:15%;');
   th2.appendChild(document.createTextNode(new_table_name+': '));
   tr2.appendChild(th2);
   for(var i=0; i<result.length; i++) {
