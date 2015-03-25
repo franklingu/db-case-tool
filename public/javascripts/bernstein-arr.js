@@ -11,6 +11,7 @@ var bernstein = (function () {
     var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var grouped = {};
     var tables = [];
+    var keysInOutput = {};
     var output = {};
 
     function removeExtraneousAttrs() {
@@ -138,17 +139,19 @@ var bernstein = (function () {
           return [];
         }
         var table = fds[0].left;
+        var key = fds[0].left;
         _.forEach(fds, function (fd) {
           table = utility.getUnion(table, fd.left);
           table = utility.getUnion(table, fd.right);
         });
-        return table;
+        return {'table': table, 'key': key};
       }
       _.forOwn(grouped, function (value, key) {
         if (!_.isUndefined(value)) {
-          var table = getTableFromFds(value);
-          if (table.length) {
-            tables.push(table);
+          var tab = getTableFromFds(value);
+          if (tab.table.length) {
+            tables.push(tab.table);
+            keysInOutput[tab.table.join(',')] = tab.key;
           }
         }
       });
@@ -211,6 +214,7 @@ var bernstein = (function () {
       addBackLostAttrs();
     }
     output.tables = tables;
+    output.keys = keysInOutput;
     return output;
   };
   return bernstein;
