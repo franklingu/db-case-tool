@@ -87,10 +87,11 @@ var dbtester = (function () {
 
   // return whether a database schema is loseless or not
   // tables:[[]], fds: [{left: , right: , type; }]
-  dbtester.isLossless = function (tables, fds) {
+  dbtester.isLossless = function (tables, fds, allAttrs) {
     var attrs = _.cloneDeep(tables);
     var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var attrSet = [];
+    var allAttrsSet = utility.removeDuplicates(allAttrs);
     var fdSides = [];
     _.forEach(attrs, function (item) {
       attrSet = utility.getUnion(attrSet, item);
@@ -99,7 +100,7 @@ var dbtester = (function () {
       fdSides = utility.getUnion(fdSides, item.left);
       fdSides = utility.getUnion(fdSides, item.right);
     });
-    return utility.isSetsEqual(fdSides, attrSet);
+    return utility.isSetsEqual(fdSides, attrSet) && utility.isSetsEqual(allAttrsSet, attrSet);
   };
 
   // return whether a database schema is dependency preserving or not

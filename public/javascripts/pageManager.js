@@ -101,6 +101,9 @@ $(document).ready(function () {
     } else if (selectedFeature === 'Feature 2') {
       var is2NF = true, is3NF = true, isBCNF = true, isLossless = true, isPreserving = true;
       var tablesToTest = [];
+      if (!$('#table_area').find('table').length) {
+        return window.alert('Please input table');
+      }
       $('#table_area').find('table').each(function () {
         var attrs = [];
         $(this).find('td').each(function () {
@@ -120,15 +123,33 @@ $(document).ready(function () {
           isBCNF = false;
         }
       });
-      isLossless = dbtester.isLossless(tablesToTest, _fds);
+      isLossless = dbtester.isLossless(tablesToTest, _fds, _variables);
       isPreserving = dbtester.isDependencyPreserving(tablesToTest, _fds);
-      var outputForNFTests = '';
-      outputForNFTests += ('The table is ' + (is2NF ? '' : 'not ') + 'in second normal form<br>');
-      outputForNFTests += ('The table is ' + (is3NF ? '' : 'not ') + 'in third normal form<br>');
-      outputForNFTests += ('The table is ' + (isBCNF ? '' : 'not ') + 'in Boyce Codd normal form<br>');
-      outputForNFTests += ('The table is ' + (isLossless ? '' : 'not ') + 'lossless<br>');
-      outputForNFTests += ('The table is ' + (isPreserving ? '' : 'not ') + 'dependency preserving<br>');
-      $('#output-algo-2').html(outputForNFTests);
+      if (is2NF) {
+        $('#2nf-btn').removeClass('test-is-false').addClass('test-is-true');
+      } else {
+        $('#2nf-btn').removeClass('test-is-true').addClass('test-is-false');
+      }
+      if (is3NF) {
+        $('#3nf-btn').removeClass('test-is-false').addClass('test-is-true');
+      } else {
+        $('#3nf-btn').removeClass('test-is-true').addClass('test-is-false');
+      }
+      if (isBCNF) {
+        $('#bcnf-btn').removeClass('test-is-false').addClass('test-is-true');
+      } else {
+        $('#bcnf-btn').removeClass('test-is-true').addClass('test-is-false');
+      }
+      if (isLossless) {
+        $('#lossless-btn').removeClass('test-is-false').addClass('test-is-true');
+      } else {
+        $('#lossless-btn').removeClass('test-is-true').addClass('test-is-false');
+      }
+      if (isPreserving) {
+        $('#fd-btn').removeClass('test-is-false').addClass('test-is-true');
+      } else {
+        $('#fd-btn').removeClass('test-is-true').addClass('test-is-false');
+      }
     } else {
       window.alert('Please select a feature');
     }
