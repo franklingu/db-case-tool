@@ -93,12 +93,10 @@ function getFDInput(){
 }
 function makeDisplay(inputData){
 	var inputDataArr = inputData.split('|');
-<<<<<<< HEAD
-	console.log(inputDataArr);
+
 	var dependency = makeTable(inputDataArr[0]);
-=======
+
 	makeTable(inputDataArr[0]);
->>>>>>> a89ca2bf816450c26d62bb9ed55784be472fe5fd
 	makeStep(inputDataArr[1]);
 	var currentOutput = document.getElementById("step-message");
 
