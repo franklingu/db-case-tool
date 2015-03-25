@@ -105,15 +105,8 @@ function BCNFDecomposition(fd, tableName){
 			     output += temp;
 			     stepOutput += temp + "<br>";	 	
 			 }
-
-		    
 		}
-		
 	}
-	console.log(relations);
 
 	return output + "|" +stepOutput;
 }
-
-
-
