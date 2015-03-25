@@ -31,11 +31,6 @@ function getBCNFDecomposition(){
 		console.log(result);
 		makeDisplay(result);
 	}
-	
-
-
-	//document.getElementById('result_output').value = result;
-
 }
 
 function processData(table){

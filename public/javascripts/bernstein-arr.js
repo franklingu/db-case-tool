@@ -38,7 +38,7 @@ var bernstein = (function () {
         });
       });
       removeEmptyFds();
-      output.steps = [translateFDsForUser(_.cloneDeep(fdSet))];
+      output.steps = ['Remove extraneous attributes: ' + translateFDsForUser(fdSet)];
     }
 
     function findCovering() {
@@ -67,7 +67,7 @@ var bernstein = (function () {
       });
       removeEmptyFds();
       fdSet = splitRightHandSide(fdSet);
-      output.steps.push(translateFDsForUser(_.cloneDeep(fdSet)));
+      output.steps.push('Find covering: ' + translateFDsForUser(fdSet));
     }
 
     function partition() {
@@ -78,7 +78,7 @@ var bernstein = (function () {
           grouped[fd.left.join(',')].push(fd);
         }
       });
-      output.steps.push(_.cloneDeep(grouped));
+      output.steps.push('Partition: ' + translateGroupedForUser(grouped));
     }
 
     function mergeEquivalentKeys() {
@@ -110,7 +110,7 @@ var bernstein = (function () {
         _.forEach(keys, innerIteratee);
       }
       _.forEach(keys, iteratee);
-      output.steps.push(_.cloneDeep(grouped));
+      output.steps.push('Merge equivalent keys: ' + translateGroupedForUser(grouped));
     }
 
     function eliminateTransitiveDependencies() {
@@ -130,7 +130,7 @@ var bernstein = (function () {
           i++;
         }
       }
-      output.steps.push(_.cloneDeep(grouped));
+      output.steps.push('Eliminate transitive dependencies: ' + translateGroupedForUser(grouped));
     }
 
     function generateTables() {
@@ -155,7 +155,7 @@ var bernstein = (function () {
           }
         }
       });
-      output.steps.push(_.cloneDeep(tables));
+      output.steps.push('Generate tables: ' + JSON.stringify(_.cloneDeep(tables)));
     }
 
     function addBackLostAttrs() {
@@ -176,7 +176,7 @@ var bernstein = (function () {
         });
         tables.push(utility.getUnion(lostAttrs, keyOfAnotherTable));
       }
-      output.steps.push(_.cloneDeep(tables));
+      output.steps.push('Add back lost attributes: ' + JSON.stringify(_.cloneDeep(tables)));
     }
 
     function removeEmptyFds() {
@@ -208,6 +208,17 @@ var bernstein = (function () {
       var outputStr = '';
       _.forEach(fds, function (fd) {
         outputStr += (fd.left.join(',') + ' -> ' + fd.right.join(','));
+      });
+      return outputStr;
+    }
+
+    function translateGroupedForUser(groups) {
+      var outputStr = '';
+      _.forOwn(groups, function (group, key) {
+        if (!_.isUndefined(group)) {
+          outputStr += key + ':';
+          outputStr += translateFDsForUser(group);
+        }
       });
       return outputStr;
     }

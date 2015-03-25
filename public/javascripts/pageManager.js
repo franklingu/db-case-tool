@@ -66,20 +66,18 @@ $(document).ready(function () {
   $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
-      //var outputForResultStep = 'Generated tables: \n';
       var outputForResultStep = 'Steps: \n';
 
       for (var i = result.tables.length - 1; i >= 0; i--) {
         outputForResult += '{' + (result.tables[i]) + '};';
-        //outputForResultStep += '{' + (result.tables[i]) + '};\n';
       }
 
       for (i = 0; i <= result.steps.length; i++) {
         if (result.steps[i]) {
-          // outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
+          outputForResultStep += 'Step ' + (i + 1) + ':' + result.steps[i] + '<br>';
         }
       }
-      makeTable(outputForResult);
+      makeDisplay(outputForResult + '|' + outputForResultStep);
     }
 
     var selectedFeature = $('#tabs>li>a.selected').html();
