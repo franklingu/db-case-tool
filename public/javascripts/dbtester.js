@@ -40,9 +40,10 @@ var dbtester = (function () {
       return isProperSub;
     }
     _.forEach(fdSet, function (item) {
-      if (!(utility.isSubset(item.left, item.right)
-          || !isProperSubsetForKey(item.left)
-          || utility.isSubset(primeAttrs, item.right))) {
+      if (utility.isSubset(attrSet, item.left) && utility.isSubset(attrSet, item.right)
+            && !(utility.isSubset(item.left, item.right)
+                || !isProperSubsetForKey(item.left)
+                || utility.isSubset(primeAttrs, item.right))) {
         isIn2NF = false;
       }
     });
@@ -58,9 +59,10 @@ var dbtester = (function () {
     var primeAttrs = getAllPrimeAttributes(keys);
     var isIn3NF = true;
     _.forEach(fdSet, function (item) {
-      if (!(utility.isSubset(item.left, item.right)
-          || utility.isSuperkeyForRelation(item.left, attrSet, fdSet)
-          || utility.isSubset(primeAttrs, item.right))) {
+      if (utility.isSubset(attrSet, item.left) && utility.isSubset(attrSet, item.right)
+          && !(utility.isSubset(item.left, item.right)
+              || utility.isSuperkeyForRelation(item.left, attrSet, fdSet)
+              || utility.isSubset(primeAttrs, item.right))) {
         isIn3NF = false;
       }
     });
@@ -74,12 +76,50 @@ var dbtester = (function () {
     var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var isInBCNF = true;
     _.forEach(fdSet, function (item) {
-      if (!(utility.isSubset(item.left, item.right)
-          || utility.isSuperkeyForRelation(item.left, attrSet, fdSet))) {
+      if (utility.isSubset(attrSet, item.left) && utility.isSubset(attrSet, item.right)
+          && !(utility.isSubset(item.left, item.right)
+              || utility.isSuperkeyForRelation(item.left, attrSet, fdSet))) {
         isInBCNF = false;
       }
     });
     return isInBCNF;
+  };
+
+  // return whether a database schema is loseless or not
+  // tables:[[]], fds: [{left: , right: , type; }]
+  dbtester.isLossless = function (tables, fds) {
+    var attrs = _.cloneDeep(tables);
+    var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
+    var attrSet = [];
+    var fdSides = [];
+    _.forEach(attrs, function (item) {
+      attrSet = utility.getUnion(attrSet, item);
+    });
+    _.forEach(fdSet, function (item) {
+      fdSides = utility.getUnion(fdSides, item.left);
+      fdSides = utility.getUnion(fdSides, item.right);
+    });
+    return utility.isSetsEqual(fdSides, attrSet);
+  };
+
+  // return whether a database schema is dependency preserving or not
+  // tables:[[]], fds: [{left: , right: , type; }]
+  dbtester.isDependencyPreserving = function (tables, fds) {
+    var attrs = _.cloneDeep(tables);
+    var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
+    var isPreserving = true;
+    _.forEach(fdSet, function (fd) {
+      if (isPreserving) {
+        isPreserving = false;
+        _.forEach(attrs, function (table) {
+          if (utility.isSubset(table, fd.left)
+              && utility.isSubset(table, fd.right)) {
+            isPreserving = true;
+          }
+        });
+      }
+    });
+    return isPreserving;
   };
 
   return dbtester;

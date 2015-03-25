@@ -66,18 +66,14 @@ $(document).ready(function () {
   $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
-      //outputForResult += 'Generated tables: ';
       for (var i = result.tables.length - 1; i >= 0; i--) {
         outputForResult += '{' + (result.tables[i]) + '};';
       }
-      //outputForResult += '<br><br>';
       for (i = 0; i <= result.steps.length; i++) {
         if (result.steps[i]) {
-          //outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
+          // outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
         }
       }
-      //outputForResult += '};';
-      //$('#output-algo').html(outputForResult);
       makeTable(outputForResult);
     }
 
@@ -100,12 +96,14 @@ $(document).ready(function () {
         getLTK();
       }
     } else if (selectedFeature === 'Feature 2') {
-      var is2NF = true, is3NF = true, isBCNF = true;
+      var is2NF = true, is3NF = true, isBCNF = true, isLossless = true, isPreserving = true;
+      var tablesToTest = [];
       $('#table_area').find('table').each(function () {
         var attrs = [];
         $(this).find('td').each(function () {
           attrs.push($(this).html());
         });
+        tablesToTest.push(attrs);
         if (is2NF && !dbtester.is2NF(attrs, _fds)) {
           is2NF = false;
           is3NF = false;
@@ -119,10 +117,14 @@ $(document).ready(function () {
           isBCNF = false;
         }
       });
+      isLossless = dbtester.isLossless(tablesToTest, _fds);
+      isPreserving = dbtester.isDependencyPreserving(tablesToTest, _fds);
       var outputForNFTests = '';
       outputForNFTests += ('The table is ' + (is2NF ? '' : 'not ') + 'in second normal form<br>');
       outputForNFTests += ('The table is ' + (is3NF ? '' : 'not ') + 'in third normal form<br>');
       outputForNFTests += ('The table is ' + (isBCNF ? '' : 'not ') + 'in Boyce Codd normal form<br>');
+      outputForNFTests += ('The table is ' + (isLossless ? '' : 'not ') + 'lossless<br>');
+      outputForNFTests += ('The table is ' + (isPreserving ? '' : 'not ') + 'dependency preserving<br>');
       $('#output-algo-2').html(outputForNFTests);
     } else {
       window.alert('Please select a feature');
