@@ -149,15 +149,15 @@ function superfluousAttributeDetection (R, B, I,fd,tableName){
 function LTK( fd,tableName){
 	console.log(tableName);
 	var R=preparatory(fd,tableName);
-	var resultString = "Preparatory result: \n" ;
+	var resultString = "Preparatory result: <br>" ;
 	for(var i=0;i<R.length;i++){
-		resultString += "R" + (i+1) +"{" + numToAttribute(tableName,R[i].A)+"}\n" ;
+		resultString += "R" + (i+1) +"{" + numToAttribute(tableName,R[i].A)+"}<br>" ;
 		resultString += "Keys: ";
 		
 		var keys=R[i].keys;
 		for(var j=0;j<keys.length;j++)
-			resultString += "" +numToAttribute(tableName,keys[j]) + "\n";
-		resultString += "\n" ;
+			resultString += "" +numToAttribute(tableName,keys[j]) + "<br>";
+		resultString += "<br>" ;
 	}
 	for(var i=0;i<R.length;i++){
 		var temp=R[i].A;
@@ -178,7 +178,7 @@ function LTK( fd,tableName){
 	}
 	
 	for(var i=0;i<R.length;i++) removeDulplicateSet(R[i].keys);
-	resultString += "Final result: \n" ;
+	resultString += "Final result: <br>" ;
     var result = "";
 	for(var i=0;i<R.length;i++){
 		var temp = "R" +(i+1)+":{" +
@@ -194,7 +194,7 @@ function LTK( fd,tableName){
 			var temp1= " (" +numToAttribute(tableName,keys[j]) + ");";
 
 			result += temp1
-			resultString += temp1 + "\n";
+			resultString += temp1 + "<br>";
 		}
 		//result +="";
 	}

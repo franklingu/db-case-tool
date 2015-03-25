@@ -82,7 +82,6 @@ function getFDInput(){
 }
 function makeDisplay(inputData){
 	var inputDataArr = inputData.split('|');
-	console.log(inputDataArr);
 	makeTable(inputDataArr[0]);
 	makeStep(inputDataArr[1]);
 }
@@ -126,9 +125,8 @@ function makeTable(inputData){
 }
 
 function makeStep(inputData){
-	var currentOutputMsg = document.getElementById('step-message');
-	currentOutputMsg.innerText = "";
-	currentOutputMsg.innerText = inputData;
+	var currentOutputMsg = $('#step-message');
+	currentOutputMsg.html(inputData);
 }
 
 function clearChildren(node){

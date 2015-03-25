@@ -66,7 +66,7 @@ $(document).ready(function () {
   $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
-      var outputForResultStep = 'Steps: \n';
+      var outputForResultStep = 'Steps: <br>';
 
       for (var i = result.tables.length - 1; i >= 0; i--) {
         outputForResult += '{' + (result.tables[i]) + '};';

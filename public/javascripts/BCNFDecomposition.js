@@ -38,7 +38,7 @@ function BCNFDecomposition(fd, tableName){
 	var output = "";
 	var stepOutput = "";
 
-	stepOutput += "BCNF Decomposition Method\n\n";
+	stepOutput += "BCNF Decomposition Method<br><br>";
 	
 	//find all the fd not in BCNF and push them into FDNotInBCNF
 	FDNotInBCNF = findFDNotInBCNF(fd, tableName, "");
@@ -63,11 +63,12 @@ function BCNFDecomposition(fd, tableName){
 		mask = setExclude(mask, fdt.right);
 		
 		stepOutput += "Step" + step + ": ";
-		stepOutput += numToAttribute(tableName, fdt.left) + "->" + numToAttribute(tableName, fdt.right) + " makes the relation not in BCNF \n";
+		stepOutput += numToAttribute(tableName, fdt.left) + "->" + numToAttribute(tableName, fdt.right)
+		              + " makes the relation not in BCNF<br>";
 		var temp = "R" + step + ": {" + numToAttribute(tableName, fdt.left) + "," + numToAttribute(tableName, fdt.right) + "}" + "(keys:" + numToAttribute(tableName, fdt.left) + ");"; 
 		
 		output += temp
-		stepOutput += temp + "\n";
+		stepOutput += temp + "<br>";
 
 		var count = 0;
 		//update the remaining fds
@@ -102,7 +103,7 @@ function BCNFDecomposition(fd, tableName){
 
 			 if(testStr.indexOf(',') >= 0){
 			     output += temp;
-			     stepOutput += temp + "\n";	 	
+			     stepOutput += temp + "<br>";	 	
 			 }
 
 		    
