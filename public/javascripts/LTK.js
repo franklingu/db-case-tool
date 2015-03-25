@@ -181,16 +181,20 @@ function LTK( fd,tableName){
 	resultString += "Final result: \n" ;
     var result = "";
 	for(var i=0;i<R.length;i++){
-		result += "R" +(i+1)+":{" +
+		var temp = "R" +(i+1)+":{" +
 			numToAttribute(tableName,R[i].A) +"} ";
-		resultString += "R" +(i+1)+":{" +
-			numToAttribute(tableName,R[i].A) +"} ";
+
+		result += temp;
+		resultString += temp;
+
 		result+="keys:";
 		resultString+="keys:";
 		var keys=R[i].keys;
 		for(var j=0;j<keys.length;j++){
-			result += " (" +numToAttribute(tableName,keys[j]) + ");";
-			resultString += "(" +numToAttribute(tableName,keys[j]) + "); \n";
+			var temp1= " (" +numToAttribute(tableName,keys[j]) + ");";
+
+			result += temp1
+			resultString += temp1 + "\n";
 		}
 		//result +="";
 	}

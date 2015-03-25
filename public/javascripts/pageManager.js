@@ -66,19 +66,21 @@ $(document).ready(function () {
   $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
-      //outputForResult += 'Generated tables: ';
+      //var outputForResultStep = 'Generated tables: \n';
+      var outputForResultStep = 'Steps: \n';
       for (var i = result.tables.length - 1; i >= 0; i--) {
         outputForResult += '{' + (result.tables[i]) + '};';
+        //outputForResultStep += '{' + (result.tables[i]) + '};\n';
       }
-      //outputForResult += '<br><br>';
+      //outputForResultStep += '\n\n';
       for (i = 0; i <= result.steps.length; i++) {
         if (result.steps[i]) {
-          //outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
+          outputForResultStep += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '\n';
         }
       }
       //outputForResult += '};';
       //$('#output-algo').html(outputForResult);
-      makeTable(outputForResult);
+      makeDisplay(outputForResult + '|' + outputForResultStep);
     }
 
     var selectedFeature = $('#tabs>li>a.selected').html();

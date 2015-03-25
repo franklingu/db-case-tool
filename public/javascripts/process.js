@@ -28,6 +28,7 @@ function getBCNFDecomposition(){
 	}
 	//$('#output-algo').html(result);
 	else{
+		console.log(result);
 		makeDisplay(result);
 	}
 	
@@ -130,6 +131,7 @@ function makeTable(inputData){
 
 function makeStep(inputData){
 	var currentOutputMsg = document.getElementById('step-message');
+	currentOutputMsg.innerText = "";
 	currentOutputMsg.innerText = inputData;
 }
 

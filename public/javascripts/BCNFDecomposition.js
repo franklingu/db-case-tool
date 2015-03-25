@@ -64,12 +64,13 @@ function BCNFDecomposition(fd, tableName){
 		relations.push(fdt.left | fdt.right);
 		mask = setExclude(mask, fdt.right);
 		
-		stepOutput += "Step" + step + ":";
-		stepOutput += numToAttribute(tableName, fdt.left) + "->" + numToAttribute(tableName, fdt.right) + " makes the relation not in BCNF\n";
-		stepOutput += "R" + step + ": {" + numToAttribute(tableName, fdt.left) + "," + numToAttribute(tableName, fdt.right) + "}" + "(keys:" + numToAttribute(tableName, fdt.left) + ");"; 
-
-		output += "R" + step + ": {" + numToAttribute(tableName, fdt.left) + "," + numToAttribute(tableName, fdt.right) + "}" + "(keys:" + numToAttribute(tableName, fdt.left) + ");"; 
+		stepOutput += "Step" + step + ": ";
+		stepOutput += numToAttribute(tableName, fdt.left) + "->" + numToAttribute(tableName, fdt.right) + " makes the relation not in BCNF \n";
+		var temp = "R" + step + ": {" + numToAttribute(tableName, fdt.left) + "," + numToAttribute(tableName, fdt.right) + "}" + "(keys:" + numToAttribute(tableName, fdt.left) + ");"; 
 		
+		output += temp
+		stepOutput += temp;
+
 		var count = 0;
 		//update the remaining fds
 		for(var i=0;i<fd.length;i++){
@@ -97,8 +98,11 @@ function BCNFDecomposition(fd, tableName){
 		}
 		step++;
 		if(inBCNF){
-			stepOutput += "R" + step + ": {" + numToAttribute(tableName, mask) + "}" + "(keys:" + numToAttribute(tableName, mask) + ")"; 
-			output += "R" + step + ": {" + numToAttribute(tableName, mask) + "}" + "(keys:" + numToAttribute(tableName, mask) + ")"; 
+			 //stepOutput += "R" + step + ": {" + numToAttribute(tableName, mask) + "}" + "(keys:" + numToAttribute(tableName, mask) + ")\n"; 
+			 var temp = "R" + step + ": {" + numToAttribute(tableName, mask) + "}" + "(keys:" + numToAttribute(tableName, mask) + ")"; 
+			 output += temp;
+			 stepOutput += temp;
+		    
 		}
 		
 	}
