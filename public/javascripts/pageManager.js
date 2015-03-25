@@ -213,6 +213,12 @@ function clearVariables () {
 
     // Clear the global variable
     _variables = [];
+
+    // Clear fd-box
+    clearRelations();
+
+    // Clear confirmed-box
+    clearRelationOutputs();
 }
 
 // ------------------------------------
