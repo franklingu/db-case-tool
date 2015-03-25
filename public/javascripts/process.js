@@ -34,11 +34,6 @@ function getBCNFDecomposition(){
 		console.log(result);
 	    makeDisplay(result);
 	}
-	
-
-
-	//document.getElementById('result_output').value = result;
-
 }
 
 function processData(table){
@@ -98,8 +93,12 @@ function getFDInput(){
 }
 function makeDisplay(inputData){
 	var inputDataArr = inputData.split('|');
+<<<<<<< HEAD
 	console.log(inputDataArr);
 	var dependency = makeTable(inputDataArr[0]);
+=======
+	makeTable(inputDataArr[0]);
+>>>>>>> a89ca2bf816450c26d62bb9ed55784be472fe5fd
 	makeStep(inputDataArr[1]);
 	var currentOutput = document.getElementById("step-message");
 
@@ -163,9 +162,8 @@ function makeTable(inputData){
 }
 
 function makeStep(inputData){
-	var currentOutputMsg = document.getElementById('step-message');
-	currentOutputMsg.innerText = "";
-	currentOutputMsg.innerText = inputData;
+	var currentOutputMsg = $('#step-message');
+	currentOutputMsg.html(inputData);
 }
 
 function clearChildren(node){

@@ -11,6 +11,7 @@ var bernstein = (function () {
     var fdSet = utility.removeDuplicates(_.cloneDeep(fds));
     var grouped = {};
     var tables = [];
+    var keysInOutput = {};
     var output = {};
 
     function removeExtraneousAttrs() {
@@ -37,7 +38,7 @@ var bernstein = (function () {
         });
       });
       removeEmptyFds();
-      output.steps = [utility.getUnion(fdSet, [])];
+      output.steps = ['Remove extraneous attributes: ' + translateFDsForUser(fdSet)];
     }
 
     function findCovering() {
@@ -66,7 +67,7 @@ var bernstein = (function () {
       });
       removeEmptyFds();
       fdSet = splitRightHandSide(fdSet);
-      output.steps.push(utility.getUnion(fdSet, []));
+      output.steps.push('Find covering: ' + translateFDsForUser(fdSet));
     }
 
     function partition() {
@@ -77,7 +78,7 @@ var bernstein = (function () {
           grouped[fd.left.join(',')].push(fd);
         }
       });
-      output.steps.push(_.cloneDeep(grouped));
+      output.steps.push('Partition: ' + translateGroupedForUser(grouped));
     }
 
     function mergeEquivalentKeys() {
@@ -109,7 +110,7 @@ var bernstein = (function () {
         _.forEach(keys, innerIteratee);
       }
       _.forEach(keys, iteratee);
-      output.steps.push(_.cloneDeep(grouped));
+      output.steps.push('Merge equivalent keys: ' + translateGroupedForUser(grouped));
     }
 
     function eliminateTransitiveDependencies() {
@@ -129,7 +130,7 @@ var bernstein = (function () {
           i++;
         }
       }
-      output.steps.push(_.cloneDeep(grouped));
+      output.steps.push('Eliminate transitive dependencies: ' + translateGroupedForUser(grouped));
     }
 
     function generateTables() {
@@ -138,21 +139,23 @@ var bernstein = (function () {
           return [];
         }
         var table = fds[0].left;
+        var key = fds[0].left;
         _.forEach(fds, function (fd) {
           table = utility.getUnion(table, fd.left);
           table = utility.getUnion(table, fd.right);
         });
-        return table;
+        return {'table': table, 'key': key};
       }
       _.forOwn(grouped, function (value, key) {
         if (!_.isUndefined(value)) {
-          var table = getTableFromFds(value);
-          if (table.length) {
-            tables.push(table);
+          var tab = getTableFromFds(value);
+          if (tab.table.length) {
+            tables.push(tab.table);
+            keysInOutput[tab.table.join(',')] = tab.key;
           }
         }
       });
-      output.steps.push(_.cloneDeep(tables));
+      output.steps.push('Generate tables: ' + JSON.stringify(_.cloneDeep(tables)));
     }
 
     function addBackLostAttrs() {
@@ -173,7 +176,7 @@ var bernstein = (function () {
         });
         tables.push(utility.getUnion(lostAttrs, keyOfAnotherTable));
       }
-      output.steps.push(_.cloneDeep(tables));
+      output.steps.push('Add back lost attributes: ' + JSON.stringify(_.cloneDeep(tables)));
     }
 
     function removeEmptyFds() {
@@ -201,6 +204,25 @@ var bernstein = (function () {
       return fdParam;
     }
 
+    function translateFDsForUser(fds) {
+      var outputStr = '';
+      _.forEach(fds, function (fd) {
+        outputStr += (fd.left.join(',') + ' -> ' + fd.right.join(','));
+      });
+      return outputStr;
+    }
+
+    function translateGroupedForUser(groups) {
+      var outputStr = '';
+      _.forOwn(groups, function (group, key) {
+        if (!_.isUndefined(group)) {
+          outputStr += key + ':';
+          outputStr += translateFDsForUser(group);
+        }
+      });
+      return outputStr;
+    }
+
     removeExtraneousAttrs();
     findCovering();
     partition();
@@ -211,6 +233,7 @@ var bernstein = (function () {
       addBackLostAttrs();
     }
     output.tables = tables;
+    output.keys = keysInOutput;
     return output;
   };
   return bernstein;
