@@ -66,33 +66,20 @@ $(document).ready(function () {
   $('.process_button').click(function () {
     function displayBernsteinAlgoResults(result) {
       var outputForResult = '';
-<<<<<<< HEAD
       //var outputForResultStep = 'Generated tables: \n';
       var outputForResultStep = 'Steps: \n';
-=======
->>>>>>> 8da39552ab5d9cb3ecdb4b653b67da6ba6ab34d0
+
       for (var i = result.tables.length - 1; i >= 0; i--) {
         outputForResult += '{' + (result.tables[i]) + '};';
         //outputForResultStep += '{' + (result.tables[i]) + '};\n';
       }
-<<<<<<< HEAD
-      //outputForResultStep += '\n\n';
-      for (i = 0; i <= result.steps.length; i++) {
-        if (result.steps[i]) {
-          outputForResultStep += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '\n';
-        }
-      }
-      //outputForResult += '};';
-      //$('#output-algo').html(outputForResult);
-      makeDisplay(outputForResult + '|' + outputForResultStep);
-=======
+
       for (i = 0; i <= result.steps.length; i++) {
         if (result.steps[i]) {
           // outputForResult += 'Step ' + (i + 1) + ':' + JSON.stringify(result.steps[i]) + '<br>';
         }
       }
       makeTable(outputForResult);
->>>>>>> 8da39552ab5d9cb3ecdb4b653b67da6ba6ab34d0
     }
 
     var selectedFeature = $('#tabs>li>a.selected').html();
