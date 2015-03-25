@@ -38,7 +38,7 @@ var bernstein = (function () {
         });
       });
       removeEmptyFds();
-      output.steps = [utility.getUnion(fdSet, [])];
+      output.steps = [translateFDsForUser(_.cloneDeep(fdSet))];
     }
 
     function findCovering() {
@@ -67,7 +67,7 @@ var bernstein = (function () {
       });
       removeEmptyFds();
       fdSet = splitRightHandSide(fdSet);
-      output.steps.push(utility.getUnion(fdSet, []));
+      output.steps.push(translateFDsForUser(_.cloneDeep(fdSet)));
     }
 
     function partition() {
@@ -202,6 +202,14 @@ var bernstein = (function () {
       });
       fdParam = utility.getUnion(fdParam, fdsToAdd);
       return fdParam;
+    }
+
+    function translateFDsForUser(fds) {
+      var outputStr = '';
+      _.forEach(fds, function (fd) {
+        outputStr += (fd.left.join(',') + ' -> ' + fd.right.join(','));
+      });
+      return outputStr;
     }
 
     removeExtraneousAttrs();
