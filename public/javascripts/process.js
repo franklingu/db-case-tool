@@ -1,4 +1,5 @@
-var fd = {left:[], right:[], type:'fd'};
+var fds = {left:[], right:[], type:'fd'};
+var fdArr= [];
 
 
 function getLTK(){
@@ -61,17 +62,19 @@ function processData(table){
 
 		   var left = tempFD.substring(0, leftbreakIndex);
 		   var right = tempFD.substring(rightStartIndex);
-		   
+		   fds = {left:[], right:[], type:'fd'};
 		   var leftArr = left.split(',');
-		   fd.left = leftArr;
+		   fds.left = leftArr;
 		   var rightArr = right.split(',');
-		   fd.right = rightArr; 
-		   fd = {left:[], right:[], type:'fd'};
+		   fds.right = rightArr; 
+		   fds.type = 'fd';
+		   fdArr.push(fds);
 
 
 		   console.log(left);
 		   console.log(right);
 		   insertFD(table, left, right , 0);
+
 		}
 	}
 
@@ -156,7 +159,7 @@ function makeTable(inputData){
 	var currentOutput = document.getElementById("output-result-div");
 	clearChildren(currentOutput);
 	currentOutput.appendChild(currentTable);
-	var dependencyPreserving = dbtester.isDependencyPreserving(tableCurrentArr,fd);
+	var dependencyPreserving = dbtester.isDependencyPreserving(tableCurrentArr,fdArr);
 	return dependencyPreserving;
 
 }

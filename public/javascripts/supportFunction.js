@@ -32,6 +32,48 @@ function addAttribute(table_name, attr_name)
 	attribute_JSON.attribute.push(attribute_to_insert);
 }
 
+function deleteAttribute(table_name, attribute_name)
+{
+
+	fd_JSON = getFD(table_name);
+	for(var i = 0; i < attribute_JSON.attribute.length; i++)
+	{
+		if (!attribute_JSON.attribute[i]) continue;
+		if (attribute_JSON.attribute[i].table == table_name && attribute_JSON.attribute[i].name == attribute_name)
+		{
+			attribute_JSON.attribute.splice(i,1);
+			
+			for(var j = fd_JSON.fd.length - 1; j >=0 ; j--)
+			{
+				if (fd_JSON.fd[j].left.indexOf(attribute_name)!=-1) 
+				{
+					fd_JSON.fd.splice(j,1);
+					continue;
+				}
+				if (fd_JSON.fd[j].right.indexOf(attribute_name)!=-1)
+				{
+					fd_JSON.fd.splice(fd_JSON.fd[j].right.indexOf(attribute_name),1);
+				}
+			}
+			break;
+		}
+	}
+}
+
+function deleteFD(table_name, left, type)
+{
+	if (!fd_JSON) fd_JSON = {"fd":[]};
+	for(var i = 0; i < fd_JSON.fd.length; i++)
+	{
+		if (!fd_JSON.fd[i]) continue;
+		if (fd_JSON.fd[i].table == table_name && fd_JSON.fd[i].left == left  && fd_JSON.fd[i].type == type)
+		{
+			fd_JSON.fd.splice(i,1);
+			break;
+		}
+	}
+}
+
 /* functional dependency */
 function insertFD(table_name, left, right, type)
 {
@@ -45,7 +87,10 @@ function getFD(table_name)
 	var ret = {"fd": []};
 	for(var i = 0; i < fd_JSON.fd.length; i++)
 	{
-		ret.fd.push(fd_JSON.fd[i]);
+		if(fd_JSON.fd[i].table == table_name){
+			ret.fd.push(fd_JSON.fd[i]);
+		}
+		
 	}
 	return ret;
 }
@@ -332,4 +377,27 @@ function findAKeyIn(K,A,fd,tableName){
 			K-=B;
 	}
 	return K;
+}
+
+function deleteFD(table_name, left, type)
+{
+	fd_JSON = {"fd":[]};
+	for(var i = 0; i < fd_JSON.fd.length; i++)
+	{
+		if (!fd_JSON.fd[i]) continue;
+		if (fd_JSON.fd[i].table == table_name && fd_JSON.fd[i].left == left  && fd_JSON.fd[i].type == type)
+		{
+			fd_JSON.fd.splice(i,1);
+			break;
+		}
+	}
+
+}
+function attributeToNum(table_name, attribute_input)
+{
+	var ret = 0;
+	var attribute = getAttribute(table_name).attribute;
+	var attribute_split = attribute_input.split(",");
+	for(var i = 0; i<attribute_split.length; i++) ret += Math.pow(2, retLocation(attribute, attribute_split[i]));
+	return ret;
 }
