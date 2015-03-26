@@ -123,7 +123,7 @@ $(document).ready(function () {
           isBCNF = false;
         }
       });
-      isLossless = dbtester.isLossless(tablesToTest, _fds, _variables);
+      isLossless = dbtester.isAttrLossless(tablesToTest, _fds, _variables);
       isPreserving = dbtester.isDependencyPreserving(tablesToTest, _fds);
       if (is2NF) {
         $('#2nf-btn').removeClass('test-is-false').addClass('test-is-true');
