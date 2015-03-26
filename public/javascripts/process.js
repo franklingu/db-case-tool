@@ -25,23 +25,23 @@ function getBCNFDecomposition(){
 	result = BCNFDecomposition(getFDNumber(table),table);
 	if(result == "No"){
 		var display = $('#variable_output').val();
-		console.log(display);
 		var process = '{'+display.substring(0, display.length)+'}';
 		makeDisplay(process + '|' + "No Change");
 
 	}
 	//$('#output-algo').html(result);
 	else{
-		console.log(result);
 	    makeDisplay(result);
 	}
 }
 
 function processData(table){
 	clearCookie();
+	fdArr= [];
+
+
 
 	var attributeInputArr = getAttributInput();
-	console.log(attributeInputArr);
 	for(var i = 0 ;i < attributeInputArr.length; i++){
 		if(attributeInputArr[i] != ""){
 		   addAttribute(table, attributeInputArr[i]);
@@ -49,14 +49,12 @@ function processData(table){
 	}
 	
 	var fdInputArr = getFDInput();
-	console.log(fdInputArr);
 	for(var i = 0 ;i < fdInputArr.length ; i++){
 		if(fdInputArr[i] != ""){
 		   var tempFD = fdInputArr[i];
 		   tempFD = tempFD.trim();
 		   tempFD = tempFD.replace(/^\{|\}$/g,"");
 		   
-		   console.log(tempFD);
 		   var leftbreakIndex = tempFD.indexOf("-");
 		   var rightStartIndex = leftbreakIndex + 2;
 
@@ -70,9 +68,6 @@ function processData(table){
 		   fds.type = 'fd';
 		   fdArr.push(fds);
 
-
-		   console.log(left);
-		   console.log(right);
 		   insertFD(table, left, right , 0);
 
 		}
@@ -89,7 +84,6 @@ function getAttributInput(){
 function getFDInput(){
 	var fdInput = $('#relation_output').val();
     fdInput = fdInput.trim();
-    console.log (fdInput);
     var fdInputArr = fdInput.split(";");
     return fdInputArr;
 
@@ -121,7 +115,6 @@ function makeTable(inputData){
 	currentTable.setAttribute("border","2");
 	currentTable.setAttribute("class", "output_result");
 	var inputDataArr = inputData.split(";");
-	console.log(inputDataArr);
 	for(var i = 0; i < inputDataArr.length; i++){
 		var indexOfStart = inputDataArr[i].indexOf('{');
 		if(inputDataArr[i].length > 0 && indexOfStart >=0){
@@ -159,7 +152,7 @@ function makeTable(inputData){
 	var currentOutput = document.getElementById("output-result-div");
 	clearChildren(currentOutput);
 	currentOutput.appendChild(currentTable);
-	var dependencyPreserving = dbtester.isDependencyPreserving(tableCurrentArr,fdArr);
+	var dependencyPreserving = dbtester.isDependencyPreserving(tableArr,fdArr);
 	return dependencyPreserving;
 
 }

@@ -139,7 +139,6 @@ function superfluousAttributeDetection (R, B, I,fd,tableName){
 	return c;
 }
 function LTK( fd,tableName){
-	console.log(tableName);
 	var R=preparatory(fd,tableName);
 	var resultString = "Preparatory result: <br>" ;
 	for(var i=0;i<R.length;i++){
